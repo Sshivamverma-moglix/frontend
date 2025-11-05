@@ -1,30 +1,77 @@
 <div class="employee-detail-container" *ngIf="employee; else noData">
   <h2>Employee Details</h2>
 
-  <div class="detail-card">
-    <div class="detail-row">
-      <label>ID:</label>
-      <span>{{ employee.id }}</span>
-    </div>
-    <div class="detail-row">
-      <label>Name:</label>
-      <span>{{ employee.name }}</span>
-    </div>
-    <div class="detail-row">
-      <label>Email:</label>
-      <span>{{ employee.email }}</span>
-    </div>
-    <div class="detail-row">
-      <label>Designation:</label>
-      <span>{{ employee.designation }}</span>
-    </div>
-    <div class="detail-row">
-      <label>Phone:</label>
-      <span>{{ employee.phone || 'N/A' }}</span>
-    </div>
-  </div>
+  <form #empForm="ngForm" (ngSubmit)="updateEmployee()">
+    <div class="detail-card">
 
-  <button routerLink="/employees">← Back to Employees</button>
+      <!-- ID -->
+      <div class="detail-row">
+        <label>ID:</label>
+        <span>{{ employee.id }}</span>
+      </div>
+
+      <!-- NAME -->
+      <div class="detail-row">
+        <label>Name <span class='error'>*</span>:</label>
+        <div class="container">
+
+          <input type="text" [(ngModel)]="employee.name" name="name" #name="ngModel" required minlength="3"
+            (keypress)="allowOnlyAlphabets($event)" />
+
+
+          <div class="error-message" *ngIf="name.invalid && name.touched">
+            <span *ngIf="name.errors?.['required']">Name is required.</span>
+            <span *ngIf="name.errors?.['minlength']">Name must be at least 3 characters.</span>
+            <span *ngIf="name.errors?.['pattern']">Only alphabets are allowed.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- EMAIL -->
+      <div class="detail-row">
+        <label>Email <span class='error'>*</span>:</label>
+        <div class="container">
+
+          <input type="email" [(ngModel)]="employee.email" name="email" #email="ngModel" required (keypress)="validateEmail($event)" />
+
+          <div class="error-message" *ngIf="email.invalid && email.touched">
+            <span *ngIf="email.errors?.['required']">Email is required.</span>
+            <span *ngIf="email.errors?.['email']">Please enter a valid email.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DESIGNATION -->
+      <div class="detail-row">
+        <label>Designation <span class='error'>*</span>:</label>
+        <div class="container">
+
+          <input type="text" [(ngModel)]="employee.designation" name="designation" #designation="ngModel" required />
+
+          <div class="error-message" *ngIf="designation.invalid && designation.touched">
+            <span *ngIf="designation.errors?.['required']">Designation is required.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHONE -->
+      <div class="detail-row">
+        <label>Phone <span class='error'>*</span>:</label>
+        <div class="container">
+
+          <input type="tel" [(ngModel)]="employee.phone" name="phone" #phone="ngModel" maxlength="10" (keypress)="allowOnlyNumbers($event)" />
+
+          <div class="error-message" *ngIf="phone.invalid && phone.touched">
+            <span *ngIf="phone.errors?.['required']">Phone number is required.</span>
+            <span *ngIf="phone.errors?.['pattern']">Enter a valid 10-digit number.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="empForm.invalid">Update</button>
+    <button routerLink="/employees">← Back to Employees</button>
+  </form>
 </div>
 
 <ng-template #noData>

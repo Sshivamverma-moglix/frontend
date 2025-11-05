@@ -36,6 +36,28 @@ span {
   color: #222;
 }
 
+.error {
+  color: red;
+  line-height: 2px;
+}
+
+input {
+  border: none;
+  padding: 7px 10px;
+  border-radius: 6px;
+}
+
+/* input:focus {
+  border: 2px solid #1976d2;
+  box-shadow: 0 0 4px rgba(25, 118, 210, 0.4);
+} */
+
+input:invalid {
+  box-shadow: none;
+  outline: none;
+}
+
+
 button {
   margin-top: 20px;
   width: 100%;
@@ -56,4 +78,27 @@ button:hover {
   text-align: center;
   color: #888;
   margin: 20px 0;
+}
+
+input.ng-invalid.ng-touched {
+  border: 1px solid #f44336;
+}
+
+input.ng-valid.ng-touched {
+  border: 1px solid #4caf50;
+}
+
+.error-message {
+  color: #f44336;
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+.error {
+  color: red;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
 }
