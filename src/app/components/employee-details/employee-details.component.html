@@ -1,0 +1,33 @@
+<div class="employee-detail-container" *ngIf="employee; else noData">
+  <h2>Employee Details</h2>
+
+  <div class="detail-card">
+    <div class="detail-row">
+      <label>ID:</label>
+      <span>{{ employee.id }}</span>
+    </div>
+    <div class="detail-row">
+      <label>Name:</label>
+      <span>{{ employee.name }}</span>
+    </div>
+    <div class="detail-row">
+      <label>Email:</label>
+      <span>{{ employee.email }}</span>
+    </div>
+    <div class="detail-row">
+      <label>Designation:</label>
+      <span>{{ employee.designation }}</span>
+    </div>
+    <div class="detail-row">
+      <label>Phone:</label>
+      <span>{{ employee.phone || 'N/A' }}</span>
+    </div>
+  </div>
+
+  <button routerLink="/employees">← Back to Employees</button>
+</div>
+
+<ng-template #noData>
+  <p class="no-data">Employee not found.</p>
+  <button routerLink="/employees">Back to List</button>
+</ng-template>

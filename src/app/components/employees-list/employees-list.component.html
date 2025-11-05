@@ -1,0 +1,28 @@
+<div class="container">
+    <h2 class="title">Employee Directory</h2>
+
+    <table class="employee-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Designation</th>
+                <th>Phone</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="data" *ngFor="let emp of employees" [routerLink]="['/employees', emp.id]">
+                <td>{{ emp.id }}</td>
+                <td>{{ emp.name }}</td>
+                <td>{{ emp.email }}</td>
+                <td>{{ emp.designation }}</td>
+                <td>{{ emp.phone || 'N/A' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p *ngIf="employees.length === 0" class="no-data">
+        No employees found.
+    </p>
+</div>

@@ -1,0 +1,44 @@
+.container {
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.employee-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.employee-table th,
+.employee-table td {
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.employee-table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.employee-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.data {
+  cursor: pointer;
+}
+
+.no-data {
+  text-align: center;
+  color: #777;
+  margin-top: 15px;
+}
