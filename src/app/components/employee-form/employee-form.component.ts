@@ -10,6 +10,8 @@ import { EmployeeService } from 'src/app/services/employee.service';
 })
 export class EmployeeFormComponent {
 
+  employees!: Employee[]
+
   constructor(private employeeService: EmployeeService, private http: HttpClient) { }
 
   newEmployee: Employee = {
@@ -24,6 +26,7 @@ export class EmployeeFormComponent {
     this.employeeService.createEmployee(this.newEmployee).subscribe({
       next: (data) => {
         console.log(data);
+
       },
       error: (error) => {
         console.log(error)

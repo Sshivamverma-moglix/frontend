@@ -42,3 +42,20 @@
   color: #777;
   margin-top: 15px;
 }
+
+td button {
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 2px;
+  padding: 6px 10px;
+  margin-left: 8px;
+}
+
+tr .btn {
+  padding: 0px 0px;
+}
+
+button:hover {
+  transform: scale(1.1);
+}

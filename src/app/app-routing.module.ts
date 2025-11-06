@@ -7,11 +7,10 @@ import { EmployeesListComponent } from './components/employees-list/employees-li
 
 
 const routes: Routes = [
-    // { path: 'about', component: AboutComponent },
+    { path: '', redirectTo: 'employees', pathMatch: 'full' },
     { path: 'employees', component: EmployeesListComponent },
     { path: 'employees/add', component: EmployeeFormComponent},
     { path: 'employees/:id', component: EmployeeDetailsComponent},
-    
 ];
 
 @NgModule({

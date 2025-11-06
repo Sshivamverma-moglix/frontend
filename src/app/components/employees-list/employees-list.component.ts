@@ -21,10 +21,26 @@ export class EmployeesListComponent implements OnInit {
     this.employeeService.getEmployees().subscribe({
       next: (data) => {
         this.employees = data;
+        console.log(data)
       },
       error: (err) => {
         console.error('Error fetching employees:', err);
       }
     });
   }
+
+  deleteEmployee(id: number, event: MouseEvent) {
+    event.stopPropagation(); // stop the click from triggering routerLink
+    this.employeeService.deleteEmployee(id).subscribe({
+      next: (data) => {
+        console.log(data);
+        this.employees = this.employees.filter(emp => emp.id !== id)
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    })
+    // your delete logic here
+  }
+
 }

@@ -9,6 +9,7 @@
                 <th>Email</th>
                 <th>Designation</th>
                 <th>Phone</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -18,6 +19,7 @@
                 <td>{{ emp.email }}</td>
                 <td>{{ emp.designation }}</td>
                 <td>{{ emp.phone || 'N/A' }}</td>
+                <td class="btn"><button (click)="deleteEmployee(emp.id, $event)">Delete</button></td>
             </tr>
         </tbody>
     </table>
