@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Employee } from 'src/app/models/employee.model';
+import { Router } from '@angular/router';
 import { EmployeeService } from 'src/app/services/employee.service';
 
 @Component({
@@ -10,28 +11,24 @@ import { EmployeeService } from 'src/app/services/employee.service';
 })
 export class EmployeeFormComponent {
 
-  employees!: Employee[]
-
-  constructor(private employeeService: EmployeeService, private http: HttpClient) { }
+  constructor(private employeeService: EmployeeService, private router: Router) {}
 
   newEmployee: Employee = {
-    id: 0,
     name: '',
     email: '',
     designation: '',
     phone: ''
-  }
+  } as Employee; // 👈 no id field here
 
   addEmployee() {
     this.employeeService.createEmployee(this.newEmployee).subscribe({
       next: (data) => {
-        console.log(data);
-
+        console.log('Employee added:', data);
+        this.router.navigate(['/employees']);
       },
       error: (error) => {
-        console.log(error)
+        console.error('Error adding employee:', error);
       }
-    })
+    });
   }
-
 }

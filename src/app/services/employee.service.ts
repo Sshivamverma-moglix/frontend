@@ -10,9 +10,18 @@ import { Employee } from '../models/employee.model';
 export class EmployeeService {
   private apiUrl = `${environment.apiBaseUrl}`;
 
-  employees!: Employee[];
+  employees: Employee[] = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+      const emp = this.getEmployees().subscribe({
+        next: (data) => {
+          this.employees = data;
+        },
+        error: (error) => {
+          console.log(error)
+        }
+      })
+   }
 
   // GET all employees
   getEmployees(): Observable<any> {
