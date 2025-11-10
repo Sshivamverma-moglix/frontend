@@ -39,14 +39,28 @@ export class SearchFilterComponent implements OnInit {
   }
 
   getManagers() {
-    this.employeeService.getEmployees().subscribe({
-      next: (data: Employee[]) => this.managers = data.filter(emp => emp.managerId === 0),
-      error: () => console.log('Error fetching managers')
+    this.employeeService.getAllManagers().subscribe({
+      next: (data) => {
+        console.log(data);
+        this.managers = data as any;
+      },
+      error: (error) => {
+        console.log(error);
+      }
     });
   }
 
   // Called when form is submitted
   onSearch() {
     this.filterChanged.emit(this.filter);
+  }
+
+  onReset() {
+    this.filter = {
+      name: '',
+      departmentId: 0,
+      managerId: 0,
+    }
+    this.filterChanged.emit(this.filter)
   }
 }

@@ -60,9 +60,12 @@
 
 
     </table>
-    <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20, 50]" (page)="onPageChange($event)" showFirstLastButtons
+    <!-- <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20, 50]" (page)="onPageChange($event)" showFirstLastButtons
         aria-label="Select page of periodic elements">
-    </mat-paginator>
+    </mat-paginator> -->
+    <app-pagination (paginationEvent)="onPageChange($event)">
+    </app-pagination>
+
 
     <p *ngIf="data.data.length === 0" class="no-data">
         No employees found.

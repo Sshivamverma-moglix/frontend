@@ -17,9 +17,13 @@ export class EmployeesListComponent implements OnInit {
 
   departmentEnum = Department;
 
-  pageSize = 5;
+
+  managerId = 0;
+  departmentId = 0;
+  pageSize = 10;
   pageIndex = 0;
   totalItems = 0;
+
 
   constructor(private employeeService: EmployeeService) { }
 
@@ -27,17 +31,22 @@ export class EmployeesListComponent implements OnInit {
     this.getEmployees();
   }
 
-  getEmployees() {
-    this.employeeService.getEmployees().subscribe({
-      next: (data) => this.data.data = data,
+  getEmployees(managerId: number | null = null, departmentId: number | null = null, pageIndex: number = 0, pageSize: number = 10) {
+    console.log(pageIndex, pageSize);
+    this.employeeService.getEmployees(managerId, departmentId, pageIndex, pageSize).subscribe({
+      next: (data) => {
+        this.data.data = data
+        this.totalItems = data.length;
+        console.log(data, data.length);
+      },
       error: (err) => console.error('Error fetching employees:', err)
     });
   }
 
   onPageChange(event: PageEvent) {
-    console.log('Page event:', event);
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
+    this.getEmployees(this.managerId, this.departmentId, this.pageIndex, this.pageSize);
   }
 
   getDepartmentName(departmentId: number): string {
@@ -60,6 +69,9 @@ export class EmployeesListComponent implements OnInit {
 
   applyFilter(filter: any) {
     console.log('Filters from child:', filter);
+    this.managerId = filter.managerId;
+    this.departmentId = filter.departmentId;
+    this.getEmployees(this.managerId, this.departmentId, this.pageIndex, this.pageSize);
     // Use filter.name, filter.departmentId, filter.managerId to filter employees
   }
 

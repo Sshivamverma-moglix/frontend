@@ -22,6 +22,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatCardModule } from '@angular/material/card';
 import { SearchFilterComponent } from './components/search-filter/search-filter.component';
+import { PaginationComponent } from './components/pagination/pagination.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { SearchFilterComponent } from './components/search-filter/search-filter.
     EmployeeDetailsComponent,
     EmployeeFormComponent,
     SearchFilterComponent,
+    PaginationComponent,
   ],
   imports: [
     BrowserModule,

@@ -13,20 +13,25 @@ export class EmployeeService {
   employees: Employee[] = [];
 
   constructor(private http: HttpClient) {
-      const emp = this.getEmployees().subscribe({
-        next: (data) => {
-          this.employees = data;
-        },
-        error: (error) => {
-          console.log(error)
-        }
-      })
-   }
+    const emp = this.getEmployees().subscribe({
+      next: (data) => {
+        this.employees = data;
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    })
+  }
 
   // GET all employees
-  getEmployees(): Observable<any> {
-    const emp = this.http.get(this.apiUrl);
+  getEmployees(managerId: null | number = null, departmentId: null | number = null, pageIndex: number = 0, pageSize: number = 0): Observable<any> {
+    const emp = this.http.get(`${this.apiUrl}?page=${pageIndex}&limit=${pageSize}&managerId=${managerId ? managerId: ''}&departmentId=${departmentId ? departmentId : ''}`);
     return emp;
+  }
+
+  getAllManagers() {
+    const managers = this.http.get(`${this.apiUrl}/managers`);
+    return managers;
   }
 
   // GET single employee by ID
