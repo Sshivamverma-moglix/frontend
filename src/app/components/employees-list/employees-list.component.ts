@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Department } from 'src/app/enums/department.enum';
 import { Employee } from 'src/app/models/employee.model';
 import { EmployeeService } from 'src/app/services/employee.service';
 
@@ -10,11 +11,20 @@ import { EmployeeService } from 'src/app/services/employee.service';
 export class EmployeesListComponent implements OnInit {
 
   employees: Employee[] = [];
+  departmentName!: Department;
 
   constructor(private employeeService: EmployeeService) { }
 
   ngOnInit() {
     this.getEmployees();
+  }
+
+  getDepartmentName(departmentId: number): string {
+    return Department[departmentId] || 'Unknown';
+  }
+
+  getManagerName(managerId: number): string {
+    return this.employees.find(emp => emp.id === managerId)?.name as string;
   }
 
   getEmployees() {

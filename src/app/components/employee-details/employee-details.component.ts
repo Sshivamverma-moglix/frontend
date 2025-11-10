@@ -26,7 +26,9 @@ export class EmployeeDetailsComponent implements OnInit {
     name: '',
     email: '',
     designation: '',
-    phone: ''
+    phone: '',
+    departmentId: 0,
+    managerId: 0,
   }
 
   allowOnlyAlphabets(event: KeyboardEvent) {

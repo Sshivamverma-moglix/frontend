@@ -25,7 +25,7 @@ export class EmployeeService {
 
   // GET all employees
   getEmployees(): Observable<any> {
-    const emp = this.http.get(this.apiUrl);
+    const emp = this.http.get(`${this.apiUrl}?limit=10`);
     return emp;
   }
 

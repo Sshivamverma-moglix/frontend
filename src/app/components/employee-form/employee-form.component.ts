@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { Employee } from 'src/app/models/employee.model';
 import { Router } from '@angular/router';
 import { EmployeeService } from 'src/app/services/employee.service';
+import { DepartmentService } from 'src/app/services/department.service';
+import { Department } from 'src/app/models/department.model';
 
 @Component({
   selector: 'app-employee-form',
@@ -11,14 +13,40 @@ import { EmployeeService } from 'src/app/services/employee.service';
 })
 export class EmployeeFormComponent {
 
-  constructor(private employeeService: EmployeeService, private router: Router) {}
+  departments!: Department[]
+  managers!: Employee[]
+  departmentId!: number
+  managerId!: number
+
+  constructor(private employeeService: EmployeeService, private departmentService: DepartmentService, private router: Router) { }
 
   newEmployee: Employee = {
     name: '',
     email: '',
     designation: '',
-    phone: ''
+    phone: '',
+    departmentId: 0,
+    managerId: 0,
   } as Employee; // 👈 no id field here
+
+  ngOnInit() {
+    this.loadDepartments();
+    this.loadManagers();
+  }
+
+  loadDepartments() {
+    this.departmentService.getDepartments().subscribe({
+      next: (data) => this.departments = data as any,
+      error: (err) => console.error('Error loading departments', err)
+    });
+  }
+
+  loadManagers() {
+    this.employeeService.getEmployees().subscribe({
+      next: (data) => this.managers = data,
+      error: (err) => console.log("error loading managers", err)
+    })
+  }
 
   addEmployee() {
     this.employeeService.createEmployee(this.newEmployee).subscribe({
@@ -31,4 +59,5 @@ export class EmployeeFormComponent {
       }
     });
   }
+
 }
