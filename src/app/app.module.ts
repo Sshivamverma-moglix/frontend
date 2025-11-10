@@ -1,15 +1,27 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-// import { Injectable } from '@angular/core';
-// import { HttpClient } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
-// import { Observable } from 'rxjs';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { EmployeesListComponent } from '../app/components/employees-list/employees-list.component';
-import { EmployeeDetailsComponent } from '../app/components/employee-details/employee-details.component';
-import { EmployeeFormComponent } from '../app/components/employee-form/employee-form.component';
+import { EmployeesListComponent } from './components/employees-list/employees-list.component';
+import { EmployeeDetailsComponent } from './components/employee-details/employee-details.component';
+import { EmployeeFormComponent } from './components/employee-form/employee-form.component';
+
+// ✅ Angular Material Modules
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatCardModule } from '@angular/material/card';
+import { SearchFilterComponent } from './components/search-filter/search-filter.component';
 
 @NgModule({
   declarations: [
@@ -17,15 +29,28 @@ import { EmployeeFormComponent } from '../app/components/employee-form/employee-
     EmployeesListComponent,
     EmployeeDetailsComponent,
     EmployeeFormComponent,
+    SearchFilterComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    // HttpClient,
     HttpClientModule,
+    BrowserAnimationsModule,
+
+    // ✅ Material Modules
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatTableModule,
+    MatButtonModule,
+    MatIconModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatCardModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

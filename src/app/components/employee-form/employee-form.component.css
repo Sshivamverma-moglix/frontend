@@ -1,77 +1,68 @@
+/* Container */
 .container {
-  max-width: 700px;
-  margin: 30px auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 32px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-h2, h3 {
+/* Heading */
+.container h2 {
   text-align: center;
-  color: #333;
+  margin-bottom: 24px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #3f51b5;
 }
 
+/* Form Layout */
 .employee-form {
-  background: #f8f8f8;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-label {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 5px;
-}
-
-label span {
-  color: red;
-}
-
-input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  background-color: #1976d2;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-button:disabled {
-  background-color: #b0b0b0;
-  cursor: not-allowed;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-table th, table td {
-  padding: 10px;
-  border: 1px solid #ddd;
-  text-align: left;
-}
-
-table th {
-  background: #eee;
-}
-
-.dropdown {
   display: flex;
-  justify-content: end;
-  gap: 50px;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Full-width Material Fields */
+.full-width {
+  width: 100%;
+}
+
+/* Submit Button */
+button[mat-raised-button] {
+  width: 100%;
+  height: 48px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover Effect */
+button[mat-raised-button]:hover {
+  transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+    margin: 20px;
+  }
+
+  .container h2 {
+    font-size: 20px;
+  }
+}
+
+/* Optional: Focus Highlight for Inputs */
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: #f9f9ff !important;
+}
+
+::ng-deep .mat-form-field-appearance-fill.mat-focused .mat-form-field-flex {
+  background-color: #eef1ff !important;
 }

@@ -1,4 +1,4 @@
-.container {
+/* .container {
   padding: 20px;
   max-width: 900px;
   margin: 0 auto;
@@ -58,4 +58,19 @@ tr .btn {
 
 button:hover {
   transform: scale(1.1);
+} */
+
+table {
+  width: 100%;
+  margin-top: 20px;
 }
+
+.mat-header-cell {
+  font-weight: bold;
+  color: #333;
+}
+
+button {
+  padding: 4px 10px;
+}
+

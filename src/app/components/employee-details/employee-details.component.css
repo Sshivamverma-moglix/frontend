@@ -1,104 +1,51 @@
 .employee-detail-container {
-  max-width: 500px;
+  max-width: 600px;
   margin: 40px auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  font-family: 'Segoe UI', sans-serif;
+  padding: 32px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
+mat-card-title {
   text-align: center;
-  color: #333;
+  font-size: 24px;
+  font-weight: 600;
+  color: #3f51b5;
   margin-bottom: 20px;
 }
 
-.detail-card {
+.employee-form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 20px;
 }
 
-.detail-row {
+.full-width {
+  width: 100%;
+}
+
+.button-row {
   display: flex;
   justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
+  gap: 16px;
+  margin-top: 16px;
 }
 
-label {
-  font-weight: 600;
-  color: #555;
-}
-
-span {
-  color: #222;
-}
-
-.error {
-  color: red;
-  line-height: 2px;
-}
-
-input {
-  border: none;
-  padding: 7px 10px;
-  border-radius: 6px;
-}
-
-/* input:focus {
-  border: 2px solid #1976d2;
-  box-shadow: 0 0 4px rgba(25, 118, 210, 0.4);
-} */
-
-input:invalid {
-  box-shadow: none;
-  outline: none;
-}
-
-
-button {
-  margin-top: 20px;
-  width: 100%;
-  background-color: #1976d2;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 10px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-button:hover {
-  background-color: #125ea4;
-}
-
-.no-data {
+.no-data-card {
+  max-width: 400px;
+  margin: 100px auto;
   text-align: center;
-  color: #888;
-  margin: 20px 0;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-input.ng-invalid.ng-touched {
-  border: 1px solid #f44336;
-}
-
-input.ng-valid.ng-touched {
-  border: 1px solid #4caf50;
-}
-
-.error-message {
-  color: #f44336;
+mat-error {
   font-size: 13px;
-  margin-top: 3px;
 }
 
-.error {
-  color: red;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
+button[mat-raised-button],
+button[mat-stroked-button] {
+  min-width: 120px;
 }

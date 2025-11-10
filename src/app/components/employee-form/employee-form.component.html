@@ -2,59 +2,62 @@
     <h2>Add New Employee</h2>
 
     <form #empForm="ngForm" (ngSubmit)="addEmployee()" class="employee-form">
-        <div class="form-group">
-            <label for="name">Name <span>*</span></label>
-            <input type="text" id="name" name="name" [(ngModel)]="newEmployee.name" required
-                placeholder="Enter employee name" />
-        </div>
 
-        <div class="form-group">
-            <label for="email">Email <span>*</span></label>
-            <input type="email" id="email" name="email" [(ngModel)]="newEmployee.email" required
-                placeholder="Enter employee email" />
-        </div>
+        <!-- Name -->
+        <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Name</mat-label>
+            <input matInput placeholder="Enter name" name="name" [(ngModel)]="newEmployee.name" required />
+        </mat-form-field>
 
-        <div class="form-group">
-            <label for="designation">Designation <span>*</span></label>
-            <input type="text" id="designation" name="designation" [(ngModel)]="newEmployee.designation" required
-                placeholder="Enter designation" />
-        </div>
+        <!-- Email -->
+        <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" placeholder="Enter email" name="email" [(ngModel)]="newEmployee.email"
+                required />
+        </mat-form-field>
 
-        <div class="dropdown">
+        <!-- Designation -->
+        <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Designation</mat-label>
+            <input matInput placeholder="Enter designation" name="designation" [(ngModel)]="newEmployee.designation"
+                required />
+        </mat-form-field>
 
-            <div class="form-group">
-                <label for="department">Department<span>*</span></label>
-                <select name="department" id="department" [(ngModel)]="newEmployee.departmentId">
-                    <option value="" disabled selected>Select department</option>
-                    <option *ngFor="let department of departments" [value]="department.id">
-                        {{ department.name }}
-                    </option>
-                </select>
-            </div>
+        <!-- Department -->
+        <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Department</mat-label>
+            <mat-select name="department" [(ngModel)]="newEmployee.departmentId" required>
+                <mat-option [value]="0" disabled>Select department</mat-option>
+                <mat-option *ngFor="let department of departments" [value]="department.id">
+                    {{ department.name }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
 
-            <div class="form-group">
-                <label for="manager">Manager</label>
-                <select name="manager" id="manager" [(ngModel)]="newEmployee.managerId">
-                    <option value="" disabled selected>Select manager</option>
-                    <option *ngFor="let manager of managers" [value]="manager.id">
-                        {{ manager.name }}
-                    </option>
-                </select>
-            </div>
+        <!-- Manager -->
+        <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Manager</mat-label>
+            <mat-select name="manager" [(ngModel)]="newEmployee.managerId">
+                <mat-option [value]="0" disabled>Select manager</mat-option>
+                <mat-option *ngFor="let manager of managers" [value]="manager.id">
+                    {{ manager.name }}
+                </mat-option>
 
-        </div>
+            </mat-select>
+        </mat-form-field>
 
+        <!-- Phone -->
+        <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Phone</mat-label>
+            <input matInput type="tel" placeholder="Enter phone number" name="phone" [(ngModel)]="newEmployee.phone"
+                pattern="[0-9]{10}" required />
+            <mat-hint align="end">10 digits only</mat-hint>
+        </mat-form-field>
 
-
-
-
-        <div class="form-group">
-            <label for="phone">Phone <span>*</span></label>
-            <input type="text" id="phone" name="phone" [(ngModel)]="newEmployee.phone" required
-                placeholder="Enter phone number" />
-        </div>
-
-        <button type="submit" [disabled]="!empForm.valid">Add Employee</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!empForm.valid">
+            Add Employee
+        </button>
     </form>
 
     <hr />
+</div>

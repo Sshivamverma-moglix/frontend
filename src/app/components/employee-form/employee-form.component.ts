@@ -49,6 +49,7 @@ export class EmployeeFormComponent {
   }
 
   addEmployee() {
+    console.log(this.newEmployee)
     this.employeeService.createEmployee(this.newEmployee).subscribe({
       next: (data) => {
         console.log('Employee added:', data);
