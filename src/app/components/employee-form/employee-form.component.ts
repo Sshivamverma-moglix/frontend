@@ -15,8 +15,6 @@ export class EmployeeFormComponent {
 
   departments!: Department[]
   managers!: Employee[]
-  departmentId!: number
-  managerId!: number
 
   constructor(private employeeService: EmployeeService, private departmentService: DepartmentService, private router: Router) { }
 

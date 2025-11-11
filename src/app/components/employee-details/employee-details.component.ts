@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Department } from 'src/app/models/department.model';
 import { Employee } from 'src/app/models/employee.model';
 import { EmployeeService } from 'src/app/services/employee.service';
+import { DepartmentService } from 'src/app/services/department.service';
 
 @Component({
   selector: 'app-employee-details',
@@ -13,12 +15,32 @@ export class EmployeeDetailsComponent implements OnInit {
 
   id: number | null = null;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, private employeeService: EmployeeService) {
+  departments!: Department[];
+  managers!: Employee[]
+
+  constructor(private route: ActivatedRoute, private http: HttpClient, private employeeService: EmployeeService, private departmentService: DepartmentService) {
     this.id = Number(route.snapshot.paramMap.get('id'))
   }
 
-  ngOnInit(): void {
+
+   ngOnInit() {
     this.getEmployee(this.id as number);
+    this.loadDepartments();
+    this.loadManagers();
+  }
+
+  loadDepartments() {
+    this.departmentService.getDepartments().subscribe({
+      next: (data) => this.departments = data as any,
+      error: (err) => console.error('Error loading departments', err)
+    });
+  }
+
+  loadManagers() {
+    this.employeeService.getAllManagers().subscribe({
+      next: (data) => this.managers = data as any,
+      error: (err) => console.log("error loading managers", err)
+    })
   }
 
   employee: Employee = {
