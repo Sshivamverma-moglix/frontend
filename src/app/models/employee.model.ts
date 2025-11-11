@@ -4,6 +4,6 @@ export interface Employee {
   email: string;
   designation: string;
   phone: string;
-  departmentId: number;
-  managerId: number;
+  departmentName: string;
+  managerName: string;
 }

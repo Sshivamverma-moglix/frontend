@@ -18,7 +18,6 @@ export class DepartmentService {
     constructor(private http: HttpClient) {
         const department = this.getDepartments().subscribe({
             next: (data) => {
-                console.log(data);
                 this.departments = data as any;
             },
             error: (error) => {

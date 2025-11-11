@@ -1,0 +1,61 @@
+.container {
+    width: fit-content;
+    float: right;
+    padding: 1rem;
+    margin-bottom: -20px;
+}
+.upload-card {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: auto;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+}
+
+.upload-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+button[mat-raised-button] {
+  min-width: 140px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+button[mat-raised-button]:hover {
+  transform: translateY(-1px);
+}
+
+.filename {
+  font-size: 14px;
+  color: #444;
+  font-weight: 500;
+  max-width: 200px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.message {
+  margin-top: 16px;
+  font-weight: bold;
+  color: #2e7d32;
+}
+
+mat-progress-bar {
+  margin-top: 12px;
+  border-radius: 5px;
+  height: 5px;
+}

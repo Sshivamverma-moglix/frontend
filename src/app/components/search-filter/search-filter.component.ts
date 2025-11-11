@@ -17,8 +17,8 @@ export class SearchFilterComponent implements OnInit {
   // Object to hold form values
   filter = {
     name: '',
-    departmentId: 0,
-    managerId: 0
+    departmentName: '',
+    managerName: ''
   };
 
   // Emit the whole filter object to parent
@@ -41,7 +41,6 @@ export class SearchFilterComponent implements OnInit {
   getManagers() {
     this.employeeService.getAllManagers().subscribe({
       next: (data) => {
-        console.log(data);
         this.managers = data as any;
       },
       error: (error) => {
@@ -58,8 +57,8 @@ export class SearchFilterComponent implements OnInit {
   onReset() {
     this.filter = {
       name: '',
-      departmentId: 0,
-      managerId: 0,
+      departmentName: '',
+      managerName: '',
     }
     this.filterChanged.emit(this.filter)
   }

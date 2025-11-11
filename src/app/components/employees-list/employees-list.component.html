@@ -1,74 +1,84 @@
-<div class="container">
+<div class="employee-container">
+  <div class="header-section">
     <h2 class="title">Employee Directory</h2>
-    <app-search-filter (filterChanged)="applyFilter($event)"></app-search-filter>
-    <app-download></app-download>
 
+    <div class="actions">
+        <app-import></app-import>
+      <app-download></app-download>
+    </div>
+  </div>
 
-    <table mat-table [dataSource]="data" class="mat-elevation-z8">
+  <app-search-filter (filterChanged)="applyFilter($event)"></app-search-filter>
 
-        <!-- ID Column -->
-        <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef> ID </th>
-            <td mat-cell *matCellDef="let emp"> {{ emp.id }} </td>
-        </ng-container>
+  <div class="table-wrapper mat-elevation-z8">
+    <table mat-table [dataSource]="data" class="employee-table">
 
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef> Name </th>
-            <td mat-cell *matCellDef="let emp"> {{ emp.name }} </td>
-        </ng-container>
+      <!-- ID -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let emp">{{ emp.id }}</td>
+      </ng-container>
 
-        <!-- Email Column -->
-        <ng-container matColumnDef="email">
-            <th mat-header-cell *matHeaderCellDef> Email </th>
-            <td mat-cell *matCellDef="let emp"> {{ emp.email }} </td>
-        </ng-container>
+      <!-- Name -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let emp">{{ emp.name }}</td>
+      </ng-container>
 
-        <!-- Designation Column -->
-        <ng-container matColumnDef="designation">
-            <th mat-header-cell *matHeaderCellDef> Designation </th>
-            <td mat-cell *matCellDef="let emp"> {{ emp.designation }} </td>
-        </ng-container>
+      <!-- Email -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>Email</th>
+        <td mat-cell *matCellDef="let emp">{{ emp.email }}</td>
+      </ng-container>
 
-        <!-- Department Column -->
-        <ng-container matColumnDef="department">
-            <th mat-header-cell *matHeaderCellDef> Department </th>
-            <td mat-cell *matCellDef="let emp"> {{ getDepartmentName(emp.departmentId) }} </td>
-        </ng-container>
+      <!-- Designation -->
+      <ng-container matColumnDef="designation">
+        <th mat-header-cell *matHeaderCellDef>Designation</th>
+        <td mat-cell *matCellDef="let emp">{{ emp.designation }}</td>
+      </ng-container>
 
-        <!-- Manager Column -->
-        <ng-container matColumnDef="manager">
-            <th mat-header-cell *matHeaderCellDef> Manager </th>
-            <td mat-cell *matCellDef="let emp"> {{ getManagerName(emp.managerId) }} </td>
-        </ng-container>
+      <!-- Department -->
+      <ng-container matColumnDef="department">
+        <th mat-header-cell *matHeaderCellDef>Department</th>
+        <td mat-cell *matCellDef="let emp">{{ emp.departmentName }}</td>
+      </ng-container>
 
-        <!-- Phone Column -->
-        <ng-container matColumnDef="phone">
-            <th mat-header-cell *matHeaderCellDef> Phone </th>
-            <td mat-cell *matCellDef="let emp"> {{ emp.phone || 'N/A' }} </td>
-        </ng-container>
+      <!-- Manager -->
+      <ng-container matColumnDef="manager">
+        <th mat-header-cell *matHeaderCellDef>Manager</th>
+        <td mat-cell *matCellDef="let emp">{{ emp.managerName }}</td>
+      </ng-container>
 
-        <!-- Actions Column -->
-        <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef>Actions</th>
-            <td mat-cell *matCellDef="let emp">
-                <button mat-raised-button color="warn" (click)="deleteEmployee(emp.id, $event)">Delete</button>
-            </td>
-        </ng-container>
+      <!-- Phone -->
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef>Phone</th>
+        <td mat-cell *matCellDef="let emp">{{ emp.phone || 'N/A' }}</td>
+      </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['/employees', row.id]"></tr>
+      <!-- Actions -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let emp">
+          <button mat-raised-button color="warn" (click)="deleteEmployee(emp.id, $event)">
+            Delete
+          </button>
+        </td>
+      </ng-container>
 
-
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        class="table-row"
+        [routerLink]="['/employees', row.id]"
+      ></tr>
     </table>
-    <!-- <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20, 50]" (page)="onPageChange($event)" showFirstLastButtons
-        aria-label="Select page of periodic elements">
-    </mat-paginator> -->
-    <app-pagination (paginationEvent)="onPageChange($event)">
-    </app-pagination>
+  </div>
 
+  <app-pagination
+    (paginationEvent)="onPageChange($event)"
+    [totalItems]="totalItems"
+  ></app-pagination>
 
-    <p *ngIf="data.data.length === 0" class="no-data">
-        No employees found.
-    </p>
+  <p *ngIf="data.data.length === 0" class="no-data">No employees found.</p>
 </div>

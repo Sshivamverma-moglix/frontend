@@ -1,0 +1,28 @@
+<div class="container">
+    <div class="upload-section">
+        <input type="file" id="fileInput" #fileInput (change)="onFileSelected($event)" accept=".csv" hidden />
+
+        <span *ngIf="selectedFile" class="filename">
+            {{ selectedFile.name }}
+        </span>
+
+
+        <button mat-raised-button color="primary" (click)="fileInput.click()">
+            <mat-icon>upload</mat-icon>
+            Choose File
+        </button>
+
+        <button mat-raised-button color="accent" (click)="onUpload()" [disabled]="!selectedFile || uploading">
+            <mat-icon>cloud_upload</mat-icon>
+            Upload
+        </button>
+
+        <button mat-raised-button color="clear" (click)="onCancel()" [disabled]="!selectedFile">
+            Cancel
+        </button>
+    </div>
+
+
+    <mat-progress-bar *ngIf="uploading" mode="indeterminate" color="primary"></mat-progress-bar>
+
+</div>

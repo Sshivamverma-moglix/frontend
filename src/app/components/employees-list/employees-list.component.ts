@@ -18,8 +18,9 @@ export class EmployeesListComponent implements OnInit {
   departmentEnum = Department;
 
 
-  managerId = 0;
-  departmentId = 0;
+  managerName = '';
+  departmentName = '';
+  name = '';
   pageSize = 10;
   pageIndex = 0;
   totalItems = 0;
@@ -31,13 +32,13 @@ export class EmployeesListComponent implements OnInit {
     this.getEmployees();
   }
 
-  getEmployees(managerId: number | null = null, departmentId: number | null = null, pageIndex: number = 0, pageSize: number = 10) {
-    console.log(pageIndex, pageSize);
-    this.employeeService.getEmployees(managerId, departmentId, pageIndex, pageSize).subscribe({
+  getEmployees(manager: string | null = null, department: string | null = null, name: string | null = null, pageIndex: number = 0, pageSize: number = 10) {
+    this.employeeService.getEmployees(manager, department, name, pageIndex, pageSize).subscribe({
       next: (data) => {
-        this.data.data = data
-        this.totalItems = data.length;
-        console.log(data, data.length);
+        this.data.data = data.data;
+        this.totalItems = data.totalRecords;
+        this.pageIndex = data.page;
+        this.pageSize = data.limit;
       },
       error: (err) => console.error('Error fetching employees:', err)
     });
@@ -46,15 +47,7 @@ export class EmployeesListComponent implements OnInit {
   onPageChange(event: PageEvent) {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
-    this.getEmployees(this.managerId, this.departmentId, this.pageIndex, this.pageSize);
-  }
-
-  getDepartmentName(departmentId: number): string {
-    return Department[departmentId] || 'Unknown';
-  }
-
-  getManagerName(managerId: number): string {
-    return this.data.data.find(emp => emp.id === managerId)?.name as string;
+    this.getEmployees(this.managerName, this.departmentName, this.name, this.pageIndex, this.pageSize);
   }
 
   deleteEmployee(id: number, event: MouseEvent) {
@@ -68,11 +61,10 @@ export class EmployeesListComponent implements OnInit {
   }
 
   applyFilter(filter: any) {
-    console.log('Filters from child:', filter);
-    this.managerId = filter.managerId;
-    this.departmentId = filter.departmentId;
-    this.getEmployees(this.managerId, this.departmentId, this.pageIndex, this.pageSize);
-    // Use filter.name, filter.departmentId, filter.managerId to filter employees
+    this.managerName = filter.managerName;
+    this.departmentName = filter.departmentName;
+    this.name = filter.name;
+    this.getEmployees(this.managerName, this.departmentName, this.name, this.pageIndex, this.pageSize);
   }
 
 }

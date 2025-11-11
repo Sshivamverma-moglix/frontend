@@ -1,33 +1,34 @@
 <form class="filters" (ngSubmit)="onSearch()">
+  <!-- Name -->
+  <mat-form-field appearance="fill">
+    <mat-label>Search by Name</mat-label>
+    <input matInput [(ngModel)]="filter.name" name="name" placeholder="Enter name" />
+  </mat-form-field>
 
-    <!-- Name -->
-    <mat-form-field appearance="fill">
-        <mat-label>Search by Name</mat-label>
-        <input matInput [(ngModel)]="filter.name" name="name" placeholder="Enter name" />
-    </mat-form-field>
+  <!-- Department -->
+  <mat-form-field appearance="fill">
+    <mat-label>Department</mat-label>
+    <mat-select [(ngModel)]="filter.departmentName" name="department">
+      <mat-option [value]="0" disabled>Select department</mat-option>
+      <mat-option *ngFor="let dept of departments" [value]="dept.name">
+        {{ dept.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
-    <!-- Department -->
-    <mat-form-field appearance="fill">
-        <mat-label>Department</mat-label>
-        <mat-select [(ngModel)]="filter.departmentId" name="department">
-            <mat-option [value]="0" disabled>Select department</mat-option>
-            <mat-option *ngFor="let dept of departments" [value]="dept.id">
-                {{ dept.name }}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
+  <!-- Manager -->
+  <mat-form-field appearance="fill">
+    <mat-label>Manager</mat-label>
+    <mat-select [(ngModel)]="filter.managerName" name="manager">
+      <mat-option [value]="0" disabled>Select manager</mat-option>
+      <mat-option *ngFor="let mgr of managers" [value]="mgr.name">
+        {{ mgr.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
-    <!-- Manager -->
-    <mat-form-field appearance="fill">
-        <mat-label>Manager</mat-label>
-        <mat-select [(ngModel)]="filter.managerId" name="manager">
-            <mat-option [value]="0" disabled>Select manager</mat-option>
-            <mat-option *ngFor="let mgr of managers" [value]="mgr.id">
-                {{ mgr.name }}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-
-    <button mat-raised-button color="clear" (click)="onReset()">Reset</button>
+  <div class="filter-buttons">
+    <button mat-raised-button color="warn" type="button" (click)="onReset()">Reset</button>
     <button mat-raised-button color="primary" type="submit">Search</button>
+  </div>
 </form>

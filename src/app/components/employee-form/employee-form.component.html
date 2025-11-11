@@ -26,9 +26,9 @@
         <!-- Department -->
         <mat-form-field appearance="fill" class="full-width">
             <mat-label>Department</mat-label>
-            <mat-select name="department" [(ngModel)]="newEmployee.departmentId" required>
+            <mat-select name="department" [(ngModel)]="newEmployee.departmentName" required>
                 <mat-option [value]="0" disabled>Select department</mat-option>
-                <mat-option *ngFor="let department of departments" [value]="department.id">
+                <mat-option *ngFor="let department of departments" [value]="department.name">
                     {{ department.name }}
                 </mat-option>
             </mat-select>
@@ -37,9 +37,9 @@
         <!-- Manager -->
         <mat-form-field appearance="fill" class="full-width">
             <mat-label>Manager</mat-label>
-            <mat-select name="manager" [(ngModel)]="newEmployee.managerId">
+            <mat-select name="manager" [(ngModel)]="newEmployee.managerName">
                 <mat-option [value]="0" disabled>Select manager</mat-option>
-                <mat-option *ngFor="let manager of managers" [value]="manager.id">
+                <mat-option *ngFor="let manager of managers" [value]="manager.name">
                     {{ manager.name }}
                 </mat-option>
 

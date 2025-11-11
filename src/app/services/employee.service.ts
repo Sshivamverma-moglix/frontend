@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Employee } from '../models/employee.model';
@@ -24,13 +24,35 @@ export class EmployeeService {
   }
 
   // GET all employees
-  getEmployees(managerId: null | number = null, departmentId: null | number = null, pageIndex: number = 0, pageSize: number = 0): Observable<any> {
-    const emp = this.http.get(`${this.apiUrl}?page=${pageIndex}&limit=${pageSize}&managerId=${managerId ? managerId: ''}&departmentId=${departmentId ? departmentId : ''}`);
-    return emp;
+ getEmployees(
+  manager: string | null = null,
+  department: string | null = null,
+  name: string | null = null,
+  pageIndex: number = 0,
+  pageSize: number = 0
+): Observable<any> {
+  let params = new HttpParams()
+    .set('page', pageIndex.toString())
+    .set('limit', pageSize.toString());
+
+  if (manager) {
+    params = params.set('manager', manager);
   }
 
+  if (department) {
+    params = params.set('department', department);
+  }
+
+  if (name) {
+    params = params.set('name', name);
+  }
+
+  return this.http.get(`${this.apiUrl}`, { params });
+}
+
+
   getAllData() {
-    const data = this.http.get(this.apiUrl);
+    const data = this.http.get(`${this.apiUrl}/all-employees`);
     return data;
   }
 
@@ -47,6 +69,12 @@ export class EmployeeService {
   // POST create new employee
   createEmployee(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/add`, data);
+  }
+
+  createEmployees(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post(`${this.apiUrl}/add-bulk`, formData);
   }
 
   // PUT update employee

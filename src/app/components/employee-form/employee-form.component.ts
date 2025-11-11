@@ -25,8 +25,8 @@ export class EmployeeFormComponent {
     email: '',
     designation: '',
     phone: '',
-    departmentId: 0,
-    managerId: 0,
+    departmentName: '',
+    managerName: '',
   } as Employee; // 👈 no id field here
 
   ngOnInit() {
@@ -42,14 +42,13 @@ export class EmployeeFormComponent {
   }
 
   loadManagers() {
-    this.employeeService.getEmployees().subscribe({
-      next: (data) => this.managers = data,
+    this.employeeService.getAllManagers().subscribe({
+      next: (data) => this.managers = data as any,
       error: (err) => console.log("error loading managers", err)
     })
   }
 
   addEmployee() {
-    console.log(this.newEmployee)
     this.employeeService.createEmployee(this.newEmployee).subscribe({
       next: (data) => {
         console.log('Employee added:', data);
