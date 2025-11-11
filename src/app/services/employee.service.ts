@@ -29,6 +29,11 @@ export class EmployeeService {
     return emp;
   }
 
+  getAllData() {
+    const data = this.http.get(this.apiUrl);
+    return data;
+  }
+
   getAllManagers() {
     const managers = this.http.get(`${this.apiUrl}/managers`);
     return managers;

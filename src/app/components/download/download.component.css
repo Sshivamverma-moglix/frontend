@@ -1,0 +1,19 @@
+.example-button-row {
+  display: flex;
+  justify-content: flex-end; /* Align button to the right */
+  padding: 1rem;
+}
+
+button {
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16); /* Soft shadow */
+  transition: transform 0.2s, box-shadow 0.2s; /* Hover animation */
+}
+
+button:hover {
+  transform: translateY(-2px); /* Slight lift on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.24);
+}

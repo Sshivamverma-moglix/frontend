@@ -23,6 +23,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatCardModule } from '@angular/material/card';
 import { SearchFilterComponent } from './components/search-filter/search-filter.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
+import { DownloadComponent } from './components/download/download.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { PaginationComponent } from './components/pagination/pagination.componen
     EmployeeFormComponent,
     SearchFilterComponent,
     PaginationComponent,
+    DownloadComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,7 @@
 <div class="container">
     <h2 class="title">Employee Directory</h2>
     <app-search-filter (filterChanged)="applyFilter($event)"></app-search-filter>
+    <app-download></app-download>
 
 
     <table mat-table [dataSource]="data" class="mat-elevation-z8">
