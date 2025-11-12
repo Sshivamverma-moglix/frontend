@@ -51,12 +51,12 @@ export class EmployeeService {
 }
 
 
-  getAllData() {
+  getAllData() : Observable<any> {
     const data = this.http.get(`${this.apiUrl}/all-employees`);
     return data;
   }
 
-  getAllManagers() {
+  getAllManagers() : Observable<any> {
     const managers = this.http.get(`${this.apiUrl}/managers`);
     return managers;
   }
