@@ -38,8 +38,8 @@ export class EmployeeDetailsComponent implements OnInit {
   }
 
   loadManagers() {
-    this.employeeService.getAllManagers().subscribe({
-      next: (data) => this.managers = data as any,
+    this.employeeService.getEmployees().subscribe({
+      next: (data) => this.managers = data.data.filter((emp:any) => emp.id !== this.id) as any,
       error: (err) => console.log("error loading managers", err)
     })
   }
@@ -95,7 +95,6 @@ export class EmployeeDetailsComponent implements OnInit {
           departmentName: data.department,
           managerName: data.manager,
         };
-        console.log(this.employee);
       },
       error: (err) => {
         alert('something went wrong');
@@ -104,12 +103,13 @@ export class EmployeeDetailsComponent implements OnInit {
   }
 
   updateEmployee() {
+   
     this.employeeService.updateEmployee(this.id as number, {
       name: this.employee.name,
       email: this.employee.email,
       designation: this.employee.designation,
       phone: this.employee.phone,
-      managerId: getIdbyName(this.employee.managerName, this.departments),
+      managerId: getIdbyName(this.employee.managerName, this.managers),
       departmentId: getIdbyName(this.employee.departmentName, this.departments)
     }
     ).subscribe({

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { DepartmentService } from 'src/app/services/department.service';
 import { Department } from 'src/app/models/department.model';
+import { getIdbyName } from 'src/app/utils/idMapper';
 
 @Component({
   selector: 'app-employee-form',
@@ -40,14 +41,23 @@ export class EmployeeFormComponent {
   }
 
   loadManagers() {
-    this.employeeService.getAllManagers().subscribe({
-      next: (data) => this.managers = data as any,
+    this.employeeService.getEmployees().subscribe({
+      next: (data) => this.managers = data.data as any,
       error: (err) => console.log("error loading managers", err)
     })
   }
 
   addEmployee() {
-    this.employeeService.createEmployee(this.newEmployee).subscribe({
+    const emp = {
+      name: this.newEmployee.name,
+      email: this.newEmployee.email,
+      designation: this.newEmployee.designation,
+      phone: this.newEmployee.phone,
+      managerId: getIdbyName(this.newEmployee.managerName, this.managers),
+      departmentId: getIdbyName(this.newEmployee.departmentName, this.departments)
+    }
+    console.log(emp);
+    this.employeeService.createEmployee(emp).subscribe({
       next: (data) => {
         console.log('Employee added:', data);
         this.router.navigate(['/employees']);
