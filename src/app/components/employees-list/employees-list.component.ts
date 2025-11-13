@@ -35,7 +35,7 @@ export class EmployeesListComponent implements OnInit {
   getEmployees(manager: string | null = null, department: string | null = null, name: string | null = null, pageIndex: number = 0, pageSize: number = 10) {
     this.employeeService.getEmployees(manager, department, name, pageIndex, pageSize).subscribe({
       next: (data) => {
-        this.data.data = data.data;
+        this.data.data = data.data.map((emp: any) => ({...emp, managerName : emp.manager, departmentName: emp.department}));
         this.totalItems = data.totalRecords;
         this.pageIndex = data.page;
         this.pageSize = data.limit;

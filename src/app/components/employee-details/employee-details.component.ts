@@ -5,6 +5,7 @@ import { Department } from 'src/app/models/department.model';
 import { Employee } from 'src/app/models/employee.model';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { DepartmentService } from 'src/app/services/department.service';
+import { getIdbyName } from 'src/app/utils/idMapper';
 
 @Component({
   selector: 'app-employee-details',
@@ -23,7 +24,7 @@ export class EmployeeDetailsComponent implements OnInit {
   }
 
 
-   ngOnInit() {
+  ngOnInit() {
     this.getEmployee(this.id as number);
     this.loadDepartments();
     this.loadManagers();
@@ -85,7 +86,16 @@ export class EmployeeDetailsComponent implements OnInit {
   getEmployee(id: number) {
     this.employeeService.getEmployeeById(id).subscribe({
       next: (data) => {
-        this.employee = data
+        this.employee = {
+          id: data.id,
+          name: data.name,
+          email: data.email,
+          designation: data.designation,
+          phone: data.phone,
+          departmentName: data.department,
+          managerName: data.manager,
+        };
+        console.log(this.employee);
       },
       error: (err) => {
         alert('something went wrong');
@@ -94,7 +104,15 @@ export class EmployeeDetailsComponent implements OnInit {
   }
 
   updateEmployee() {
-    this.employeeService.updateEmployee(this.id as number, this.employee).subscribe({
+    this.employeeService.updateEmployee(this.id as number, {
+      name: this.employee.name,
+      email: this.employee.email,
+      designation: this.employee.designation,
+      phone: this.employee.phone,
+      managerId: getIdbyName(this.employee.managerName, this.departments),
+      departmentId: getIdbyName(this.employee.departmentName, this.departments)
+    }
+    ).subscribe({
       next: (data) => {
         console.log(data);
       },
