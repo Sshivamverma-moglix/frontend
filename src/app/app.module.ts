@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { EmployeesListComponent } from './components/employees-list/employees-list.component';
 import { EmployeeDetailsComponent } from './components/employee-details/employee-details.component';
 import { EmployeeFormComponent } from './components/employee-form/employee-form.component';
+import { NgChartsModule } from 'ng2-charts';
 
 // ✅ Angular Material Modules
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -27,6 +28,7 @@ import { SearchFilterComponent } from './components/search-filter/search-filter.
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { DownloadComponent } from './components/download/download.component';
 import { ImportComponent } from './components/import/import.component';
+import { ChartComponent } from './components/chart/chart.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,7 @@ import { ImportComponent } from './components/import/import.component';
     PaginationComponent,
     DownloadComponent,
     ImportComponent,
+    ChartComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,6 +48,7 @@ import { ImportComponent } from './components/import/import.component';
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    NgChartsModule,
 
     // ✅ Material Modules
     MatFormFieldModule,
