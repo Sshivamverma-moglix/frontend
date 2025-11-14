@@ -75,3 +75,26 @@ button[mat-raised-button]:hover {
   color: #999;
   margin-top: 30px;
 }
+
+.chart-wrapper {
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.chart-wrapper app-chart {
+  display: block;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .chart-wrapper {
+    padding: 15px;
+    margin-top: 20px;
+  }
+}
+  

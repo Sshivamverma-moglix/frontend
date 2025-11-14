@@ -29,6 +29,7 @@ import { PaginationComponent } from './components/pagination/pagination.componen
 import { DownloadComponent } from './components/download/download.component';
 import { ImportComponent } from './components/import/import.component';
 import { ChartComponent } from './components/chart/chart.component';
+import { NewChartComponent } from './components/new-chart/new-chart.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { ChartComponent } from './components/chart/chart.component';
     DownloadComponent,
     ImportComponent,
     ChartComponent,
+    NewChartComponent,
   ],
   imports: [
     BrowserModule,
