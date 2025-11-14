@@ -6,6 +6,7 @@ import { Employee } from 'src/app/models/employee.model';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { DepartmentService } from 'src/app/services/department.service';
 import { getIdbyName } from 'src/app/utils/idMapper';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-employee-details',
@@ -19,7 +20,7 @@ export class EmployeeDetailsComponent implements OnInit {
   departments!: Department[];
   managers!: Employee[]
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, private employeeService: EmployeeService, private departmentService: DepartmentService) {
+  constructor(private route: ActivatedRoute,  private snackBar: MatSnackBar, private http: HttpClient, private employeeService: EmployeeService, private departmentService: DepartmentService) {
     this.id = Number(route.snapshot.paramMap.get('id'))
   }
 
@@ -114,10 +115,10 @@ export class EmployeeDetailsComponent implements OnInit {
     }
     ).subscribe({
       next: (data) => {
-        console.log(data);
+        this.snackBar.open('Employee updated successfully!', 'Close', { duration: 3000 });
       },
       error: (error) => {
-        console.log(error);
+        this.snackBar.open('Failed to update Employee!', 'Close', { duration: 3000 });
       }
     })
   }

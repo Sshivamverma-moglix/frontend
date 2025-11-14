@@ -1,6 +1,6 @@
 <div class="container">
     <div class="upload-section">
-        <input type="file" id="fileInput" #fileInput (change)="onFileSelected($event)" accept=".csv" hidden />
+        <input type="file" id="fileInput" #fileInput (change)="onFileSelected($event)" accept=".csv, .xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden />
 
         <span *ngIf="selectedFile" class="filename">
             {{ selectedFile.name }}

@@ -4,6 +4,7 @@ import { Employee } from 'src/app/models/employee.model';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { Department } from 'src/app/enums/department.enum';
 import { PageEvent } from '@angular/material/paginator';
+import { ChartConfiguration } from 'chart.js';
 
 @Component({
   selector: 'app-employees-list',
@@ -17,6 +18,10 @@ export class EmployeesListComponent implements OnInit {
 
   departmentEnum = Department;
 
+  barChartLabels: string[] = [];
+  barChartDatasets: ChartConfiguration<'bar'>['data']['datasets'] = [];
+
+
 
   managerName = '';
   departmentName = '';
@@ -29,13 +34,32 @@ export class EmployeesListComponent implements OnInit {
   constructor(private employeeService: EmployeeService) { }
 
   ngOnInit() {
+   this.employeeService.getAllData().subscribe((data: any[]) => {
+      const groupedData: { [key: string]: number } = {};
+
+      data.forEach(emp => {
+        const date = emp.createdDate;
+        groupedData[date] = (groupedData[date] || 0) + 1;
+      });
+
+      this.barChartLabels = Object.keys(groupedData);
+
+      this.barChartDatasets = [
+        {
+          data: Object.values(groupedData),
+          label: 'Employees Created',
+          backgroundColor: 'rgba(54, 162, 235, 0.7)'
+        }
+      ];
+      console.log(this.barChartDatasets);
+    });
     this.getEmployees();
   }
 
   getEmployees(manager: string | null = null, department: string | null = null, name: string | null = null, pageIndex: number = 0, pageSize: number = 10) {
     this.employeeService.getEmployees(manager, department, name, pageIndex, pageSize).subscribe({
       next: (data) => {
-        this.data.data = data.data.map((emp: any) => ({...emp, managerName : emp.manager, departmentName: emp.department}));
+        this.data.data = data.data.map((emp: any) => ({ ...emp, managerName: emp.manager, departmentName: emp.department }));
         this.totalItems = data.totalRecords;
         this.pageIndex = data.page;
         this.pageSize = data.limit;

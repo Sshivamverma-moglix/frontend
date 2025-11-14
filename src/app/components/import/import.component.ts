@@ -6,6 +6,7 @@ import * as Papa from 'papaparse';
 import { Employee } from 'src/app/models/employee.model';
 import { Department } from 'src/app/models/department.model';
 import { DepartmentService } from 'src/app/services/department.service';
+import { parseCSV, parseXLSX } from '../../utils/parser'
 
 @Component({
   selector: 'app-import',
@@ -24,7 +25,7 @@ export class ImportComponent implements OnInit {
     private employeeService: EmployeeService,
     private snackBar: MatSnackBar,
     private departmentService: DepartmentService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadDepartments();
@@ -49,43 +50,38 @@ export class ImportComponent implements OnInit {
     this.selectedFile = event.target.files[0];
   }
 
-  onUpload(): void {
-    if (!this.selectedFile) return;
+ uploadToBackend(data: any[]) {
+  console.log("Parsed data:", data);
 
-    // this.uploading = true;
+  const csv = Papa.unparse(data);
+  const file = new File([csv], "data.csv", { type: "text/csv" });
 
-    Papa.parse(this.selectedFile, {
-      header: true,
-      skipEmptyLines: true,
-      complete: (result: any) => {
+  this.employeeService.createEmployees(file).subscribe({
+    next: (res) => {
+      this.snackBar.open('File uploaded successfully!', 'Close', { duration: 3000 });
+    },
+    error: (err) => {
+      console.log(err);
+      this.snackBar.open('Upload failed', 'Close', { duration: 3000 });
+    }
+  });
+}
 
-        const updatedResult = result.data.map((row: any) => ({
-          name: row.name,
-          email: row.email,
-          designation: row.designation,
-          phone: row.phone,
-          managerId: row.manager,
-          departmentId: row.department
-        }));
 
-        const newCsv = Papa.unparse(updatedResult);
-        const updatedFile = new File([newCsv], 'data.csv', { type: 'text/csv' });
-        
-        this.employeeService.createEmployees(updatedFile).subscribe({
-          next: (res) => {
-            this.uploading = false;
-            this.message = res.message;
-            this.snackBar.open('File uploaded successfully!', 'Close', { duration: 3000 });
-          },
-          error: (err) => {
-            this.uploading = false;
-            this.message = 'Upload failed: ' + (err.error || 'Server error');
-            this.snackBar.open('Upload failed!', 'Close', { duration: 3000 });
-          }
-        });
-      }
-    });
+
+ onUpload(): void {
+  if (!this.selectedFile) return;
+
+  const fileName = this.selectedFile.name.toLowerCase();
+
+  if (fileName.endsWith('.csv')) {
+    parseCSV(this.selectedFile, (json) => this.uploadToBackend(json));
+  } else if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
+    parseXLSX(this.selectedFile, (json) => this.uploadToBackend(json));
+  } else {
+    this.snackBar.open('Unsupported file format!', 'Close', { duration: 3000 });
   }
+}
 
   onCancel(): void {
     this.selectedFile = null;

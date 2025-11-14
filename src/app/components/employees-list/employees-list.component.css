@@ -63,6 +63,7 @@ button[mat-raised-button] {
   font-size: 13px;
   padding: 4px 16px;
   min-width: 100px;
+  margin-left: 20px;
 }
 
 button[mat-raised-button]:hover {

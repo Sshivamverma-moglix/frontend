@@ -3,7 +3,7 @@
     <h2 class="title">Employee Directory</h2>
 
     <div class="actions">
-        <app-import></app-import>
+      <app-import></app-import>
       <app-download></app-download>
     </div>
   </div>
@@ -62,29 +62,24 @@
           <button mat-raised-button color="warn" (click)="deleteEmployee(emp.id, $event)">
             Delete
           </button>
+
+          <button mat-raised-button color="primary" [routerLink]="['/employees',emp.id]">
+            Update
+          </button>
         </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr
-        mat-row
-        *matRowDef="let row; columns: displayedColumns"
-        class="table-row"
-        [routerLink]="['/employees', row.id]"
-      ></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns" class="table-row"></tr>
     </table>
   </div>
 
-  <app-pagination
-    (paginationEvent)="onPageChange($event)"
-    [totalItems]="totalItems"
-  ></app-pagination>
+  <app-pagination (paginationEvent)="onPageChange($event)" [totalItems]="totalItems"></app-pagination>
 
-  
+
   <p *ngIf="data.data.length === 0" class="no-data">No employees found.</p>
 
-  
-  <div class="chart-wrapper">
-    <app-chart></app-chart>
-  </div>
+  <app-new-chart [chartLabels]="barChartLabels" [chartDatasets]="barChartDatasets" chartType="bar"
+    chartTitle="Employees Created Per Date" [responsive]="true">
+  </app-new-chart>
 </div>
