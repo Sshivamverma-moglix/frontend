@@ -64,8 +64,8 @@ export class ImportComponent implements OnInit {
           email: row.email,
           designation: row.designation,
           phone: row.phone,
-          managerId: getIdbyName(row.manager, this.managers),
-          departmentId: getIdbyName(row.department, this.departments)
+          managerId: row.manager,
+          departmentId: row.department
         }));
 
         const newCsv = Papa.unparse(updatedResult);

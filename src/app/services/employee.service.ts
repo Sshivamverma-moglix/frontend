@@ -25,14 +25,7 @@ export class EmployeeService {
         console.log(error)
       }
     })
-    this.departmentService.getDepartments().subscribe({
-      next: (data) => {
-        this.departments = data as any;
-      },
-      error: (error) => {
-        console.log("error", error.error);
-      }
-    })
+   this.departments = this.departmentService.departments;
   }
 
   // GET all employees
