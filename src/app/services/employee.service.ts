@@ -3,6 +3,9 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Employee } from '../models/employee.model';
+import { getIdbyName } from '../utils/idMapper';
+import { Department } from '../models/department.model';
+import { DepartmentService } from './department.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +14,10 @@ export class EmployeeService {
   private apiUrl = `${environment.apiBaseUrl}`;
 
   employees: Employee[] = [];
+  departments: Department[] = [];
 
-  constructor(private http: HttpClient) {
-    const emp = this.getEmployees().subscribe({
+  constructor(private http: HttpClient, private departmentService: DepartmentService) {
+    const emp = this.getAllData().subscribe({
       next: (data) => {
         this.employees = data;
       },
@@ -21,42 +25,52 @@ export class EmployeeService {
         console.log(error)
       }
     })
+    this.departmentService.getDepartments().subscribe({
+      next: (data) => {
+        this.departments = data as any;
+      },
+      error: (error) => {
+        console.log("error", error.error);
+      }
+    })
   }
 
   // GET all employees
- getEmployees(
-  manager: string | null = null,
-  department: string | null = null,
-  name: string | null = null,
-  pageIndex: number = 0,
-  pageSize: number = 0
-): Observable<any> {
-  let params = new HttpParams()
-    .set('page', pageIndex.toString())
-    .set('limit', pageSize.toString());
+  getEmployees(
+    manager: string | null = null,
+    department: string | null = null,
+    name: string | null = null,
+    pageIndex: number = 0,
+    pageSize: number = 0
+  ): Observable<any> {
+    let params = new HttpParams()
+      .set('page', pageIndex.toString())
+      .set('limit', pageSize.toString());
 
-  if (manager) {
-    params = params.set('manager', manager);
+    if (manager) {
+      const id = getIdbyName(manager, this.employees);
+      params = params.set('manager', id);
+    }
+
+    if (department) {
+      const id = getIdbyName(department, this.departments);
+      params = params.set('department', id);
+    }
+
+    if (name) {
+      params = params.set('name', name);
+    }
+
+    return this.http.get(`${this.apiUrl}`, { params });
   }
 
-  if (department) {
-    params = params.set('department', department);
-  }
 
-  if (name) {
-    params = params.set('name', name);
-  }
-
-  return this.http.get(`${this.apiUrl}`, { params });
-}
-
-
-  getAllData() : Observable<any> {
+  getAllData(): Observable<any> {
     const data = this.http.get(`${this.apiUrl}/all-employees`);
     return data;
   }
 
-  getAllManagers() : Observable<any> {
+  getAllManagers(): Observable<any> {
     const managers = this.http.get(`${this.apiUrl}/managers`);
     return managers;
   }
