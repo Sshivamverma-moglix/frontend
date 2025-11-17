@@ -1,7 +1,6 @@
 import * as Papa from 'papaparse';
 import * as XLSX from 'xlsx';
 
-// Convert value to number or null
 export function toNumber(val: any): number | null {
   if (val === undefined || val === null || val === "") return null;
   const num = Number(val);

@@ -7,3 +7,10 @@ export interface Employee {
   departmentName: string;
   managerName: string;
 }
+
+
+export interface ValidationRule {
+  column: string;
+  required?: boolean;
+  type?: 'email' | 'phone' | 'number' | 'string' | 'date';
+}

@@ -1,6 +1,7 @@
 import * as Papa from 'papaparse';
 import * as XLSX from 'xlsx';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ValidationRule } from '../models/employee.model';
 
 
 export function validateCSV(
@@ -74,3 +75,57 @@ export async function validateExcel(
     return false;
   }
 }
+
+export function validateRow(row: any, rules: ValidationRule[]): string[] {
+  const errors: string[] = [];
+
+  rules.forEach(rule => {
+    const val = row[rule.column];
+
+    // Required check
+    if (rule.required && (val === undefined || val === null || val.toString().trim() === '')) {
+      errors.push(`${rule.column} is required`);
+      return;
+    }
+
+    if (!val) return;
+
+    switch (rule.type) {
+      case 'email':
+        if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(val)) errors.push(`${rule.column} is not a valid email`);
+        break;
+      case 'phone':
+        if (!/^\+?\d{7,15}$/.test(val)) errors.push(`${rule.column} is not a valid phone number`);
+        break;
+      case 'number':
+        if (isNaN(Number(val))) errors.push(`${rule.column} must be a number`);
+        break;
+      case 'date':
+        if (isNaN(Date.parse(val))) errors.push(`${rule.column} must be a valid date`);
+        break;
+      case 'string':
+        if (typeof val !== 'string') errors.push(`${rule.column} must be a string`);
+        break;
+    }
+  });
+
+  return errors;
+}
+
+// Validate all rows
+export function validateData(data: any[], rules: ValidationRule[]): { validData: any[], errors: string[] } {
+  const validData: any[] = [];
+  const errors: string[] = [];
+
+  data.forEach((row, index) => {
+    const rowErrors = validateRow(row, rules);
+    if (rowErrors.length) {
+      errors.push(`Row ${index + 2}: ${rowErrors.join(', ')}`);
+    } else {
+      validData.push(row);
+    }
+  });
+
+  return { validData, errors };
+}
+
