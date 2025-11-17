@@ -33,8 +33,6 @@ export class NewChartComponent implements OnInit, OnChanges {
         labels: this.chartLabels,
         datasets: this.chartDatasets
       };
-
-      console.log("Updated chartData:", this.chartData);
     }
   }
 }

@@ -79,7 +79,7 @@
 
   <p *ngIf="data.data.length === 0" class="no-data">No employees found.</p>
 
-  <app-new-chart [chartLabels]="barChartLabels" [chartDatasets]="barChartDatasets" chartType="bar"
+  <app-new-chart [chartLabels]="barChartLabels" [chartDatasets]="barChartDatasets" [chartType]="charType"
     chartTitle="Employees Created Per Date" [responsive]="true">
   </app-new-chart>
 </div>

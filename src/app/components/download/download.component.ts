@@ -62,7 +62,10 @@ export class DownloadComponent {
 
   onDownload() {
     const dialogRef = this.dialog.open(DownloadFormatDownloadComponent, {
-      width: '350px'
+      width: '350px',
+      data: {
+        title: "Select download format"
+      }
     });
 
     dialogRef.afterClosed().subscribe(format => {

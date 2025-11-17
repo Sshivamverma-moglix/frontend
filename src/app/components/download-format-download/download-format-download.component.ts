@@ -1,5 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
+export interface DownloadDialogData {
+  title: string;
+  message?: string;
+}
+
 
 @Component({
   selector: 'app-download-format-download',
@@ -8,7 +14,10 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class DownloadFormatDownloadComponent {
 
-  constructor(public dialogRef: MatDialogRef<DownloadFormatDownloadComponent>) { }
+  constructor(
+    public dialogRef: MatDialogRef<DownloadFormatDownloadComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DownloadDialogData
+  ) { }
 
   onChoose(format: string) {
     this.dialogRef.close(format);

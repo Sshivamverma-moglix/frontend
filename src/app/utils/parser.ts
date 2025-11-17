@@ -18,6 +18,7 @@ export function parseCSV(file: File, callback: (data: any[]) => void) {
         email: row.email?.trim(),
         designation: row.designation?.trim(),
         phone: row.phone?.trim(),
+        createdDate: row.createdDate?.trim(),
         managerId: toNumber(row.managerId),
         departmentId: toNumber(row.departmentId)
       }));
@@ -36,15 +37,15 @@ export function parseXLSX(file: File, callback: (data: any[]) => void) {
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     const json = XLSX.utils.sheet_to_json(sheet);
 
-    console.log(json);
 
     const cleaned = json.map((row: any) => ({
       name: row.name,
       email: row.email,
       designation: row.designation,
       phone: row.phone,
+      createdDate: row.createdDate?.trim(),
       managerId: toNumber(row.manager),
-      departmentId: toNumber(row.departmentId)
+      departmentId: toNumber(row.department)
     }));
 
     callback(cleaned);

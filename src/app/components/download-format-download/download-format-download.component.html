@@ -1,5 +1,9 @@
-<h2 mat-dialog-title>Select Download Format</h2>
+<h2 mat-dialog-title>{{data.title}}</h2>
 
+<mat-dialog-content *ngIf="data.message">
+  <p>{{ data.message }}</p>
+</mat-dialog-content>
+  
 <mat-dialog-content>
   <p>Please choose file type:</p>
 </mat-dialog-content>

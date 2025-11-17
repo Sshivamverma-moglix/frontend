@@ -22,7 +22,7 @@
     <mat-select [(ngModel)]="filter.managerName" name="manager">
       <mat-option [value]="0" disabled>Select manager</mat-option>
       <mat-option *ngFor="let mgr of managers" [value]="mgr.name">
-        {{ mgr.name }}
+        {{ mgr.name }} ({{mgr.id}})
       </mat-option>
     </mat-select>
   </mat-form-field>

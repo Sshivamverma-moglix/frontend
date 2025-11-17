@@ -5,7 +5,7 @@ import { Employee } from 'src/app/models/employee.model';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { Department } from 'src/app/enums/department.enum';
 import { PageEvent } from '@angular/material/paginator';
-import { ChartConfiguration } from 'chart.js';
+import { ChartConfiguration, ChartType } from 'chart.js';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
@@ -21,8 +21,9 @@ export class EmployeesListComponent implements OnInit {
 
   departmentEnum = Department;
 
+  charType = "bar"
   barChartLabels: string[] = [];
-  barChartDatasets: ChartConfiguration<'bar'>['data']['datasets'] = [];
+  barChartDatasets: ChartConfiguration<ChartType>['data']['datasets'] = [];
 
 
 
@@ -51,10 +52,9 @@ export class EmployeesListComponent implements OnInit {
         {
           data: Object.values(groupedData),
           label: 'Employees Created',
-          backgroundColor: 'rgba(54, 162, 235, 0.7)'
+          backgroundColor: 'rgba(54, 162, 235)'
         }
       ];
-      console.log(this.barChartDatasets);
     });
     this.getEmployees();
   }
@@ -87,7 +87,6 @@ export class EmployeesListComponent implements OnInit {
 
   dialogRef.afterClosed().subscribe(result => {
     if (result) {
-      // User confirmed delete
       this.deleteEmployee(id);
     }
   });

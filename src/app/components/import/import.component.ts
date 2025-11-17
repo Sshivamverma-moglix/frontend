@@ -6,6 +6,8 @@ import { DepartmentService } from 'src/app/services/department.service';
 import { parseCSV, parseXLSX } from '../../utils/parser'
 import { MatDialog } from '@angular/material/dialog';
 import { DownloadFormatDownloadComponent } from '../download-format-download/download-format-download.component';
+import { validateCSV, validateExcel } from 'src/app/utils/validator';
+
 
 @Component({
   selector: 'app-import',
@@ -17,6 +19,8 @@ export class ImportComponent {
   selectedFile: File | null = null;
   selectedFormat: string | null = null;
   uploading = false;
+  requiredColumns = ['name', 'email', 'designation', 'phone', 'createdDate', 'manager', 'department'];
+
 
   constructor(
     private employeeService: EmployeeService,
@@ -25,7 +29,7 @@ export class ImportComponent {
     private dialog: MatDialog
   ) { }
 
-  onFileSelected(event: any): void {
+  async onFileSelected(event: any): Promise<void> {
     const file = event.target.files[0];
 
     if (!file) {
@@ -35,7 +39,6 @@ export class ImportComponent {
 
     const fileName = file.name.toLowerCase();
 
-    // Validate CSV
     if (this.selectedFormat === 'csv' && !fileName.endsWith('.csv')) {
       this.snackBar.open('You selected CSV but uploaded a non-CSV file!', 'Close', { duration: 5000 });
       this.selectedFile = null;
@@ -43,7 +46,6 @@ export class ImportComponent {
       return;
     }
 
-    // Validate Excel
     if (this.selectedFormat === 'xlsx' &&
       !(fileName.endsWith('.xlsx') || fileName.endsWith('.xls'))) {
       this.snackBar.open('You selected Excel but uploaded a non-Excel file!', 'Close', { duration: 5000 });
@@ -52,9 +54,20 @@ export class ImportComponent {
       return;
     }
 
-    // If valid →
+    let isValid = false;
+    if (this.selectedFormat === 'csv') {
+      isValid = await validateCSV(file, this.requiredColumns, this.snackBar);
+    } else if (this.selectedFormat === 'xlsx') {
+      isValid = await validateExcel(file, this.requiredColumns, this.snackBar);
+    }
+
+    if (!isValid) {
+      this.selectedFile = null;
+      event.target.value = "";
+      return;
+    }
+    
     this.selectedFile = file;
-    console.log("Valid file selected:", this.selectedFile);
   }
 
 
@@ -78,7 +91,11 @@ export class ImportComponent {
 
   openChooseFormatDialog() {
     const dialogRef = this.dialog.open(DownloadFormatDownloadComponent, {
-      width: '350px'
+      width: '350px',
+      data: {
+        title: "Select upload format",
+        message: "Please upload a file that includes all required columns: name, email, designation, phone, createdDate, managerId, departmentId. All fields are mandatory except managerId and createdDate."
+      }
     });
 
     dialogRef.afterClosed().subscribe((format: string) => {
@@ -103,8 +120,10 @@ export class ImportComponent {
 
     // ---- Existing format handling ----
     if (fileName.endsWith('.csv')) {
+      console.log(this.selectedFile);
       parseCSV(this.selectedFile, (json) => this.uploadToBackend(json));
     } else if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
+      console.log(this.selectedFile);
       parseXLSX(this.selectedFile, (json) => this.uploadToBackend(json));
     } else {
       this.snackBar.open('Unsupported file format!', 'Close', { duration: 3000 });
