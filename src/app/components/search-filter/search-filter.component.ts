@@ -51,6 +51,7 @@ export class SearchFilterComponent implements OnInit {
 
   // Called when form is submitted
   onSearch() {
+    console.log(this.filter); 
     this.filterChanged.emit(this.filter);
   }
 

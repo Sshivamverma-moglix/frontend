@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Select Download Format</h2>
+
+<mat-dialog-content>
+  <p>Please choose file type:</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="dialogRef.close()">Cancel</button>
+  <button mat-stroked-button color="primary" (click)="onChoose('csv')">CSV</button>
+  <button mat-raised-button color="accent" (click)="onChoose('xlsx')">Excel (.xlsx)</button>
+</mat-dialog-actions>

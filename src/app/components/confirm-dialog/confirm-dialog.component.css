@@ -1,0 +1,12 @@
+mat-dialog-content {
+  font-size: 15px;
+  padding-top: 10px;
+}
+
+mat-dialog-actions {
+  padding: 10px 0;
+}
+
+button {
+  min-width: 80px;
+}

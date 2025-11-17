@@ -31,6 +31,9 @@ import { DownloadComponent } from './components/download/download.component';
 import { ImportComponent } from './components/import/import.component';
 import { ChartComponent } from './components/chart/chart.component';
 import { NewChartComponent } from './components/new-chart/new-chart.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { DownloadFormatDownloadComponent } from './components/download-format-download/download-format-download.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +47,8 @@ import { NewChartComponent } from './components/new-chart/new-chart.component';
     ImportComponent,
     ChartComponent,
     NewChartComponent,
+    ConfirmDialogComponent,
+    DownloadFormatDownloadComponent,
   ],
   imports: [
     BrowserModule,
@@ -67,6 +72,7 @@ import { NewChartComponent } from './components/new-chart/new-chart.component';
     MatProgressBarModule,
     MatCardModule,
     MatSnackBarModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

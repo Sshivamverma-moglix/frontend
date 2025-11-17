@@ -59,7 +59,7 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Actions</th>
         <td mat-cell *matCellDef="let emp">
-          <button mat-raised-button color="warn" (click)="deleteEmployee(emp.id, $event)">
+          <button mat-raised-button color="warn" (click)="openDeleteDialog(emp.id, emp.name, $event)">
             Delete
           </button>
 

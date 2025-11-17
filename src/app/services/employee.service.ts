@@ -17,7 +17,7 @@ export class EmployeeService {
   departments: Department[] = [];
 
   constructor(private http: HttpClient, private departmentService: DepartmentService) {
-    const emp = this.getAllData().subscribe({
+    this.getAllData().subscribe({
       next: (data) => {
         this.employees = data;
       },
@@ -25,7 +25,13 @@ export class EmployeeService {
         console.log(error)
       }
     })
-   this.departments = this.departmentService.departments;
+
+    this.departmentService.getDepartments().subscribe({
+      next: (data) => {
+        this.departments = data as any;
+      },
+      error: (error) => console.log('Failed to fetch department')
+    })
   }
 
   // GET all employees
@@ -36,6 +42,7 @@ export class EmployeeService {
     pageIndex: number = 0,
     pageSize: number = 0
   ): Observable<any> {
+
     let params = new HttpParams()
       .set('page', pageIndex.toString())
       .set('limit', pageSize.toString());
@@ -46,6 +53,7 @@ export class EmployeeService {
     }
 
     if (department) {
+      console.log('department is working', department, this.departments);
       const id = getIdbyName(department, this.departments);
       params = params.set('department', id);
     }

@@ -6,6 +6,8 @@ import { EmployeeService } from 'src/app/services/employee.service';
 import { Department } from 'src/app/enums/department.enum';
 import { PageEvent } from '@angular/material/paginator';
 import { ChartConfiguration } from 'chart.js';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-employees-list',
@@ -32,10 +34,10 @@ export class EmployeesListComponent implements OnInit {
   totalItems = 0;
 
 
-  constructor(private employeeService: EmployeeService, private snackBar: MatSnackBar) { }
+  constructor(private employeeService: EmployeeService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
 
   ngOnInit() {
-   this.employeeService.getAllData().subscribe((data: any[]) => {
+    this.employeeService.getAllData().subscribe((data: any[]) => {
       const groupedData: { [key: string]: number } = {};
 
       data.forEach(emp => {
@@ -75,15 +77,32 @@ export class EmployeesListComponent implements OnInit {
     this.getEmployees(this.managerName, this.departmentName, this.name, this.pageIndex, this.pageSize);
   }
 
-  deleteEmployee(id: number, event: MouseEvent) {
-    event.stopPropagation();
+  openDeleteDialog(id: number, name: string, event: MouseEvent) {
+  event.stopPropagation();  // prevent row click
+
+  const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+    width: '350px',
+    data: { name }  // passing employee name in dialog
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
+      // User confirmed delete
+      this.deleteEmployee(id);
+    }
+  });
+}
+
+  deleteEmployee(id: number) {
     this.employeeService.deleteEmployee(id).subscribe({
       next: () => {
-        this.data.data = this.data.data.filter(emp => emp.id !== id);
-        this.snackBar.open("Employee deleted successfully", "Close", {duration: 3000})
+        this.data.data = this.data.data.filter(emp => {
+          emp.id !== id;
+        });
+        this.snackBar.open("Employee deleted successfully", "Close", { duration: 3000 })
       },
       error: (err) => {
-        this.snackBar.open("Failed to delete Employee", "Close", {duration: 3000})
+        this.snackBar.open("Failed to delete Employee", "Close", { duration: 3000 })
       }
     });
   }

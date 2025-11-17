@@ -1,13 +1,17 @@
 <div class="container">
     <div class="upload-section">
-        <input type="file" id="fileInput" #fileInput (change)="onFileSelected($event)" accept=".csv, .xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden />
-
+       <input
+  type="file"
+  #fileInput
+  hidden
+  (change)="onFileSelected($event)"
+/>
         <span *ngIf="selectedFile" class="filename">
             {{ selectedFile.name }}
         </span>
 
 
-        <button mat-raised-button color="primary" (click)="fileInput.click()">
+        <button mat-raised-button color="primary" (click)="openChooseFormatDialog()">
             <mat-icon>upload</mat-icon>
             Choose File
         </button>

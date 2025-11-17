@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { EmployeeService } from 'src/app/services/employee.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DownloadFormatDownloadComponent } from '../download-format-download/download-format-download.component';
+import * as XLSX from 'xlsx'
 
 @Component({
   selector: 'app-download',
@@ -8,7 +11,7 @@ import { EmployeeService } from 'src/app/services/employee.service';
 })
 export class DownloadComponent {
 
-  constructor(private employeeService: EmployeeService) { }
+  constructor(private employeeService: EmployeeService, private dialog: MatDialog) { }
 
   generateCsv(data: any[]): string {
     if (!data || data.length === 0) {
@@ -39,14 +42,43 @@ export class DownloadComponent {
     URL.revokeObjectURL(url);
   }
 
+  downloadExcel(data: any[], fileName = 'employees.xlsx') {
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+    const blob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    link.click();
+
+    URL.revokeObjectURL(url);
+  }
+
   onDownload() {
-    console.log("download is clicked!");
-    this.employeeService.getAllData().subscribe({
-      next: (data: any) => {
-        const csv = this.generateCsv(data);
-        this.downloadCsvFile(csv);
-      },
-      error: (error) => console.log('error occured while fetching data')
-    })
+    const dialogRef = this.dialog.open(DownloadFormatDownloadComponent, {
+      width: '350px'
+    });
+
+    dialogRef.afterClosed().subscribe(format => {
+      if (!format) return; // cancelled
+
+      this.employeeService.getAllData().subscribe({
+        next: (data: any[]) => {
+          if (format === 'csv') {
+            const csv = this.generateCsv(data);
+            this.downloadCsvFile(csv);
+          } else if (format === 'xlsx') {
+            this.downloadExcel(data);
+          }
+        },
+        error: () => console.log('Error fetching data')
+      });
+    });
   }
 }
