@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Employee } from 'src/app/models/employee.model';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { Department } from 'src/app/enums/department.enum';
@@ -31,7 +32,7 @@ export class EmployeesListComponent implements OnInit {
   totalItems = 0;
 
 
-  constructor(private employeeService: EmployeeService) { }
+  constructor(private employeeService: EmployeeService, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
    this.employeeService.getAllData().subscribe((data: any[]) => {
@@ -79,8 +80,11 @@ export class EmployeesListComponent implements OnInit {
     this.employeeService.deleteEmployee(id).subscribe({
       next: () => {
         this.data.data = this.data.data.filter(emp => emp.id !== id);
+        this.snackBar.open("Employee deleted successfully", "Close", {duration: 3000})
       },
-      error: (err) => console.error(err)
+      error: (err) => {
+        this.snackBar.open("Failed to delete Employee", "Close", {duration: 3000})
+      }
     });
   }
 

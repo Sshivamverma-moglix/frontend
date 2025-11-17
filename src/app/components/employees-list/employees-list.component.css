@@ -50,7 +50,6 @@
 .mat-row:hover {
   background-color: #f9f9ff;
   transition: background-color 0.2s ease-in-out;
-  cursor: pointer;
 }
 
 .mat-cell,

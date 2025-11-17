@@ -6,11 +6,7 @@
         <!-- NAME -->
         <mat-form-field appearance="fill" class="full-width">
             <mat-label>Name</mat-label>
-            <input
-                matInput
-                placeholder="Enter name"
-                formControlName="name"
-            />
+            <input matInput placeholder="Enter name" formControlName="name" (input)="restrictNameInput($event)" />
 
             <mat-error *ngIf="newEmployee.get('name')?.touched && newEmployee.get('name')?.invalid">
                 <span *ngIf="newEmployee.get('name')?.hasError('required')">Name is required.</span>
@@ -21,12 +17,8 @@
         <!-- EMAIL -->
         <mat-form-field appearance="fill" class="full-width">
             <mat-label>Email</mat-label>
-            <input
-                matInput
-                type="email"
-                placeholder="Enter email"
-                formControlName="email"
-            />
+            <input matInput type="email" placeholder="Enter email" formControlName="email"
+                (input)="restrictEmailInput($event)" />
 
             <mat-error *ngIf="newEmployee.get('email')?.touched && newEmployee.get('email')?.invalid">
                 <span *ngIf="newEmployee.get('email')?.hasError('required')">Email is required.</span>
@@ -37,11 +29,7 @@
         <!-- DESIGNATION -->
         <mat-form-field appearance="fill" class="full-width">
             <mat-label>Designation</mat-label>
-            <input
-                matInput
-                placeholder="Enter designation"
-                formControlName="designation"
-            />
+            <input matInput placeholder="Enter designation" formControlName="designation" />
 
             <mat-error *ngIf="newEmployee.get('designation')?.touched && newEmployee.get('designation')?.invalid">
                 Designation is required.
@@ -51,14 +39,14 @@
         <!-- DEPARTMENT -->
         <mat-form-field appearance="fill" class="full-width">
             <mat-label>Department</mat-label>
-            <mat-select formControlName="department">
+            <mat-select formControlName="departmentId">
                 <mat-option value="" disabled>Select department</mat-option>
                 <mat-option *ngFor="let d of departments" [value]="d.id">
                     {{ d.name }}
                 </mat-option>
             </mat-select>
 
-            <mat-error *ngIf="newEmployee.get('department')?.touched && newEmployee.get('department')?.invalid">
+            <mat-error *ngIf="newEmployee.get('departmentId')?.touched && newEmployee.get('department')?.invalid">
                 Department is required.
             </mat-error>
         </mat-form-field>
@@ -66,7 +54,7 @@
         <!-- MANAGER (optional) -->
         <mat-form-field appearance="fill" class="full-width">
             <mat-label>Manager</mat-label>
-            <mat-select formControlName="manager">
+            <mat-select formControlName="managerId">
                 <mat-option value="">None</mat-option>
                 <mat-option *ngFor="let m of managers" [value]="m.id">
                     {{ m.name }}
@@ -77,13 +65,8 @@
         <!-- PHONE -->
         <mat-form-field appearance="fill" class="full-width">
             <mat-label>Phone</mat-label>
-            <input
-                matInput
-                type="tel"
-                placeholder="Enter phone number"
-                maxlength="10"
-                formControlName="phone"
-            />
+            <input matInput type="tel" placeholder="Enter phone number" maxlength="10" formControlName="phone"
+                (input)="restrictPhoneInput($event)" />
 
             <mat-hint align="end">10 digits only</mat-hint>
 
@@ -94,13 +77,8 @@
         </mat-form-field>
 
         <!-- SUBMIT -->
-        <button
-            mat-raised-button
-            color="primary"
-            type="submit"
-            [disabled]="newEmployee.invalid"
-        >
-            Add Employee
+        <button mat-raised-button color="primary" type="submit" [disabled]="newEmployee.invalid">
+            Add Employee <span *ngIf="newEmployee.invalid">{{newEmployee.errors}}</span>
         </button>
     </form>
 

@@ -1,76 +1,124 @@
-<mat-card class="employee-detail-container" *ngIf="employee; else noData">
+<mat-card class="employee-detail-container" *ngIf="employeeForm; else noData">
   <mat-card-title>Employee Details</mat-card-title>
 
-  <form #empForm="ngForm" (ngSubmit)="updateEmployee()" class="employee-form">
+  <form [formGroup]="employeeForm" (ngSubmit)="updateEmployee()" class="employee-form">
 
-    <!-- Employee ID (read-only) -->
-    <mat-form-field appearance="fill" class="full-width">
-      <mat-label>ID</mat-label>
-      <input matInput [value]="employee.id" readonly />
-    </mat-form-field>
+    <!-- EMPLOYEE ID -->
+    <span class="emp-id">Employee ID: {{ id }}</span>
 
-    <!-- Name -->
+    <!-- NAME -->
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>Name</mat-label>
-      <input matInput placeholder="Enter name" [(ngModel)]="employee.name" name="name" #name="ngModel" required
-        minlength="3" (keypress)="allowOnlyAlphabets($event)" />
-      <mat-error *ngIf="name.errors?.['required']">Name is required</mat-error>
-      <mat-error *ngIf="name.errors?.['minlength']">Minimum 3 characters required</mat-error>
+      <input
+        matInput
+        placeholder="Enter name"
+        formControlName="name"
+        (input)="restrictNameInput($event)"
+      />
+
+      <mat-error *ngIf="employeeForm.get('name')?.hasError('required')">
+        Name is required
+      </mat-error>
+      <mat-error *ngIf="employeeForm.get('name')?.hasError('pattern')">
+        Only alphabets and spaces allowed
+      </mat-error>
     </mat-form-field>
 
-    <!-- Email -->
+    <!-- EMAIL -->
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>Email</mat-label>
-      <input matInput type="email" placeholder="Enter email" [(ngModel)]="employee.email" name="email" #email="ngModel"
-        required email />
-      <mat-error *ngIf="email.errors?.['required']">Email is required</mat-error>
-      <mat-error *ngIf="email.errors?.['email']">Enter a valid email</mat-error>
+      <input
+        matInput
+        type="email"
+        placeholder="Enter email"
+        formControlName="email"
+        (input)="restrictEmailInput($event)"
+      />
+
+      <mat-error *ngIf="employeeForm.get('email')?.hasError('required')">
+        Email is required
+      </mat-error>
+      <mat-error *ngIf="employeeForm.get('email')?.hasError('email')">
+        Enter a valid email
+      </mat-error>
     </mat-form-field>
 
-    <!-- Designation -->
+    <!-- DESIGNATION -->
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>Designation</mat-label>
-      <input matInput placeholder="Enter designation" [(ngModel)]="employee.designation" name="designation"
-        #designation="ngModel" required />
-      <mat-error *ngIf="designation.errors?.['required']">Designation is required</mat-error>
+      <input
+        matInput
+        placeholder="Enter designation"
+        formControlName="designation"
+      />
+      <mat-error *ngIf="employeeForm.get('designation')?.hasError('required')">
+        Designation is required
+      </mat-error>
     </mat-form-field>
 
-    <!-- Department -->
+    <!-- DEPARTMENT -->
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>Department</mat-label>
-      <mat-select name="department" [(ngModel)]="employee.departmentName" required>
-        <mat-option [value]="0" disabled>Select department</mat-option>
-        <mat-option *ngFor="let department of departments" [value]="department.name">
-          {{ department.name }}
+      <mat-select formControlName="departmentId">
+        <mat-option value="" disabled>Select department</mat-option>
+
+        <mat-option
+          *ngFor="let dept of departments"
+          [value]="dept.id"
+        >
+          {{ dept.name }}
+        </mat-option>
+      </mat-select>
+
+      <mat-error *ngIf="employeeForm.get('departmentId')?.hasError('required')">
+        Department is required
+      </mat-error>
+    </mat-form-field>
+
+    <!-- MANAGER -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Manager</mat-label>
+      <mat-select formControlName="managerId">
+        <mat-option value="">Select manager</mat-option>
+
+        <mat-option
+          *ngFor="let m of managers"
+          [value]="m.id"
+        >
+          {{ m.name }}
         </mat-option>
       </mat-select>
     </mat-form-field>
 
-     <!-- Manager -->
-        <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Manager</mat-label>
-            <mat-select name="manager" [(ngModel)]="employee.managerName">
-                <mat-option [value]="0" disabled>Select manager</mat-option>
-                <mat-option *ngFor="let manager of managers" [value]="manager.name">
-                    {{ manager.name }}
-                </mat-option>
-
-            </mat-select>
-        </mat-form-field>
-
-    <!-- Phone -->
+    <!-- PHONE -->
     <mat-form-field appearance="fill" class="full-width">
       <mat-label>Phone</mat-label>
-      <input matInput type="tel" placeholder="Enter phone number" [(ngModel)]="employee.phone" name="phone"
-        #phone="ngModel" pattern="[0-9]{10}" maxlength="10" required />
+      <input
+        matInput
+        placeholder="Enter phone number"
+        maxlength="10"
+        formControlName="phone"
+        (input)="restrictPhoneInput($event)"
+      />
+
       <mat-hint align="end">10 digits only</mat-hint>
-      <mat-error *ngIf="phone.errors?.['required']">Phone is required</mat-error>
-      <mat-error *ngIf="phone.errors?.['pattern']">Enter a valid 10-digit number</mat-error>
+
+      <mat-error *ngIf="employeeForm.get('phone')?.hasError('required')">
+        Phone is required
+      </mat-error>
+      <mat-error *ngIf="employeeForm.get('phone')?.hasError('pattern')">
+        Enter a valid 10-digit phone number
+      </mat-error>
     </mat-form-field>
 
-    <!-- Buttons -->
+    <!-- BUTTONS -->
     <div class="button-row">
-      <button mat-raised-button color="primary" type="submit" [disabled]="empForm.invalid">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="employeeForm.invalid"
+      >
         Update
       </button>
 
@@ -81,7 +129,7 @@
   </form>
 </mat-card>
 
-<!-- No Data Template -->
+<!-- NO DATA -->
 <ng-template #noData>
   <mat-card class="no-data-card">
     <mat-card-content>

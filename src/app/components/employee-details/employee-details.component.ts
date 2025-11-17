@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Department } from 'src/app/models/department.model';
 import { Employee } from 'src/app/models/employee.model';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { DepartmentService } from 'src/app/services/department.service';
 import { getIdbyName } from 'src/app/utils/idMapper';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { allowOnlyDigits, allowOnlyLetters, sanitizeEmail } from 'src/app/utils/parser';
 
 @Component({
   selector: 'app-employee-details',
@@ -15,112 +17,102 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class EmployeeDetailsComponent implements OnInit {
 
-  id: number | null = null;
+  id!: number;
 
-  departments!: Department[];
-  managers!: Employee[]
+  departments: Department[] = [];
+  managers: Employee[] = [];
 
-  constructor(private route: ActivatedRoute,  private snackBar: MatSnackBar, private http: HttpClient, private employeeService: EmployeeService, private departmentService: DepartmentService) {
-    this.id = Number(route.snapshot.paramMap.get('id'))
-  }
-
+  constructor(
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar,
+    private employeeService: EmployeeService,
+    private departmentService: DepartmentService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    this.getEmployee(this.id as number);
+    this.id = Number(this.route.snapshot.paramMap.get('id'));
+
     this.loadDepartments();
     this.loadManagers();
+    this.getEmployee(this.id);
   }
 
+   restrictNameInput(event: any) {
+    const sanitized = allowOnlyLetters(event);
+    this.employeeForm.get('name')?.setValue(sanitized);
+  }
+
+  restrictPhoneInput(event: any) {
+    const sanitized = allowOnlyDigits(event);
+    this.employeeForm.get('phone')?.setValue(sanitized);
+  }
+
+  restrictEmailInput(event: any) {
+    const sanitized = sanitizeEmail(event);
+    this.employeeForm.get('email')?.setValue(sanitized);
+  }
+
+
+  employeeForm = new FormGroup({
+    name: new FormControl('', [
+      Validators.required,
+      Validators.pattern(/^[A-Za-z ]+$/)
+    ]),
+    email: new FormControl('', [
+      Validators.required,
+      Validators.email
+    ]),
+    designation: new FormControl('', [
+      Validators.required,
+      Validators.pattern(/\S+/)
+    ]),
+    phone: new FormControl('', [
+      Validators.required,
+      Validators.pattern(/^[0-9]{10}$/)
+    ]),
+    departmentId: new FormControl(null, Validators.required),
+    managerId: new FormControl(null)
+  });
+
   loadDepartments() {
-    this.departmentService.getDepartments().subscribe({
-      next: (data) => this.departments = data as any,
-      error: (err) => console.error('Error loading departments', err)
-    });
+    this.departments = this.departmentService.departments;
   }
 
   loadManagers() {
-    this.employeeService.getEmployees().subscribe({
-      next: (data) => this.managers = data.data.filter((emp:any) => emp.id !== this.id) as any,
-      error: (err) => console.log("error loading managers", err)
-    })
+    this.managers = this.employeeService.employees;
   }
-
-  employee: Employee = {
-    id: 0,
-    name: '',
-    email: '',
-    designation: '',
-    phone: '',
-    departmentName: '',
-    managerName: '',
-  }
-
-  allowOnlyAlphabets(event: KeyboardEvent) {
-    const charCode = event.key.charCodeAt(0);
-    if (!/[a-zA-Z\s]/.test(event.key)) {
-      event.preventDefault();
-    }
-  }
-
-  allowOnlyNumbers(event: KeyboardEvent) {
-    const char = event.key;
-    // Allow only digits
-    if (!/^\d$/.test(char)) {
-      event.preventDefault();
-    }
-  }
-
-  validateEmail(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const value = input.value;
-
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!regex.test(value)) {
-      console.log('Invalid email:', value);
-    } else {
-      console.log('Valid email:', value);
-    }
-  }
-
 
   getEmployee(id: number) {
     this.employeeService.getEmployeeById(id).subscribe({
       next: (data) => {
-        this.employee = {
-          id: data.id,
+        this.employeeForm.patchValue({
           name: data.name,
           email: data.email,
           designation: data.designation,
           phone: data.phone,
-          departmentName: data.department,
-          managerName: data.manager,
-        };
+          departmentId: getIdbyName(data.department, this.departments),
+          managerId: getIdbyName(data.manager, this.managers)
+        });
       },
-      error: (err) => {
-        alert('something went wrong');
-      }
-    })
+      error: () => alert('Something went wrong')
+    });
   }
 
   updateEmployee() {
-   
-    this.employeeService.updateEmployee(this.id as number, {
-      name: this.employee.name,
-      email: this.employee.email,
-      designation: this.employee.designation,
-      phone: this.employee.phone,
-      managerId: getIdbyName(this.employee.managerName, this.managers),
-      departmentId: getIdbyName(this.employee.departmentName, this.departments)
+    if (this.employeeForm.invalid) {
+      this.employeeForm.markAllAsTouched();
+      return;
     }
-    ).subscribe({
-      next: (data) => {
-        this.snackBar.open('Employee updated successfully!', 'Close', { duration: 3000 });
-      },
-      error: (error) => {
-        this.snackBar.open('Failed to update Employee!', 'Close', { duration: 3000 });
-      }
-    })
-  }
 
+    this.employeeService.updateEmployee(this.id, this.employeeForm.value).subscribe({
+      next: () => {
+        this.snackBar.open('Employee updated successfully!', 'Close', { duration: 3000 });
+        this.router.navigate(['/employees']);
+      },
+      error: () => {
+        this.snackBar.open('Failed to update employee!', 'Close', { duration: 3000 });
+      }
+    });
+  }
 }
