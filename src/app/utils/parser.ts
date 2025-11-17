@@ -2,7 +2,7 @@ import * as Papa from 'papaparse';
 import * as XLSX from 'xlsx';
 
 // Convert value to number or null
-function toNumber(val: any): number | null {
+export function toNumber(val: any): number | null {
   if (val === undefined || val === null || val === "") return null;
   const num = Number(val);
   return isNaN(num) ? null : num;
@@ -51,4 +51,22 @@ export function parseXLSX(file: File, callback: (data: any[]) => void) {
   };
 
   reader.readAsBinaryString(file);
+}
+
+export function allowOnlyLetters(event: any): string {
+  const sanitized = event.target.value.replace(/[^A-Za-z ]/g, '');
+  event.target.value = sanitized;
+  return sanitized;
+}
+
+export function allowOnlyDigits(event: any): string {
+  const sanitized = event.target.value.replace(/[^0-9]/g, '');
+  event.target.value = sanitized;
+  return sanitized;
+}
+
+export function sanitizeEmail(event: any): string {
+  const sanitized = event.target.value.replace(/[^a-zA-Z0-9@._\-]/g, '');
+  event.target.value = sanitized;
+  return sanitized;
 }

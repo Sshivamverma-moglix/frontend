@@ -1,60 +1,105 @@
 <div class="container">
     <h2>Add New Employee</h2>
 
-    <form #empForm="ngForm" (ngSubmit)="addEmployee()" class="employee-form">
+    <form [formGroup]="newEmployee" (ngSubmit)="submitForm()" class="employee-form">
 
-        <!-- Name -->
+        <!-- NAME -->
         <mat-form-field appearance="fill" class="full-width">
             <mat-label>Name</mat-label>
-            <input matInput placeholder="Enter name" name="name" [(ngModel)]="newEmployee.name" required />
+            <input
+                matInput
+                placeholder="Enter name"
+                formControlName="name"
+            />
+
+            <mat-error *ngIf="newEmployee.get('name')?.touched && newEmployee.get('name')?.invalid">
+                <span *ngIf="newEmployee.get('name')?.hasError('required')">Name is required.</span>
+                <span *ngIf="newEmployee.get('name')?.hasError('pattern')">Only letters are allowed.</span>
+            </mat-error>
         </mat-form-field>
 
-        <!-- Email -->
+        <!-- EMAIL -->
         <mat-form-field appearance="fill" class="full-width">
             <mat-label>Email</mat-label>
-            <input matInput type="email" placeholder="Enter email" name="email" [(ngModel)]="newEmployee.email"
-                required />
+            <input
+                matInput
+                type="email"
+                placeholder="Enter email"
+                formControlName="email"
+            />
+
+            <mat-error *ngIf="newEmployee.get('email')?.touched && newEmployee.get('email')?.invalid">
+                <span *ngIf="newEmployee.get('email')?.hasError('required')">Email is required.</span>
+                <span *ngIf="newEmployee.get('email')?.hasError('email')">Enter a valid email address.</span>
+            </mat-error>
         </mat-form-field>
 
-        <!-- Designation -->
+        <!-- DESIGNATION -->
         <mat-form-field appearance="fill" class="full-width">
             <mat-label>Designation</mat-label>
-            <input matInput placeholder="Enter designation" name="designation" [(ngModel)]="newEmployee.designation"
-                required />
+            <input
+                matInput
+                placeholder="Enter designation"
+                formControlName="designation"
+            />
+
+            <mat-error *ngIf="newEmployee.get('designation')?.touched && newEmployee.get('designation')?.invalid">
+                Designation is required.
+            </mat-error>
         </mat-form-field>
 
-        <!-- Department -->
+        <!-- DEPARTMENT -->
         <mat-form-field appearance="fill" class="full-width">
             <mat-label>Department</mat-label>
-            <mat-select name="department" [(ngModel)]="newEmployee.departmentName" required>
-                <mat-option [value]="0" disabled>Select department</mat-option>
-                <mat-option *ngFor="let department of departments" [value]="department.name">
-                    {{ department.name }}
+            <mat-select formControlName="department">
+                <mat-option value="" disabled>Select department</mat-option>
+                <mat-option *ngFor="let d of departments" [value]="d.id">
+                    {{ d.name }}
                 </mat-option>
             </mat-select>
+
+            <mat-error *ngIf="newEmployee.get('department')?.touched && newEmployee.get('department')?.invalid">
+                Department is required.
+            </mat-error>
         </mat-form-field>
 
-        <!-- Manager -->
+        <!-- MANAGER (optional) -->
         <mat-form-field appearance="fill" class="full-width">
             <mat-label>Manager</mat-label>
-            <mat-select name="manager" [(ngModel)]="newEmployee.managerName">
-                <mat-option [value]="0" disabled>Select manager</mat-option>
-                <mat-option *ngFor="let manager of managers" [value]="manager.name">
-                    {{ manager.name }}
+            <mat-select formControlName="manager">
+                <mat-option value="">None</mat-option>
+                <mat-option *ngFor="let m of managers" [value]="m.id">
+                    {{ m.name }}
                 </mat-option>
-
             </mat-select>
         </mat-form-field>
 
-        <!-- Phone -->
+        <!-- PHONE -->
         <mat-form-field appearance="fill" class="full-width">
             <mat-label>Phone</mat-label>
-            <input matInput type="tel" placeholder="Enter phone number" name="phone" [(ngModel)]="newEmployee.phone"
-                pattern="[0-9]{10}" required />
+            <input
+                matInput
+                type="tel"
+                placeholder="Enter phone number"
+                maxlength="10"
+                formControlName="phone"
+            />
+
             <mat-hint align="end">10 digits only</mat-hint>
+
+            <mat-error *ngIf="newEmployee.get('phone')?.touched && newEmployee.get('phone')?.invalid">
+                <span *ngIf="newEmployee.get('phone')?.hasError('required')">Phone is required.</span>
+                <span *ngIf="newEmployee.get('phone')?.hasError('pattern')">Phone must be exactly 10 digits.</span>
+            </mat-error>
         </mat-form-field>
 
-        <button mat-raised-button color="primary" type="submit" [disabled]="!empForm.valid">
+        <!-- SUBMIT -->
+        <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="newEmployee.invalid"
+        >
             Add Employee
         </button>
     </form>

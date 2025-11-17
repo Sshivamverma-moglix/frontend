@@ -6,6 +6,7 @@ import { EmployeeService } from 'src/app/services/employee.service';
 import { DepartmentService } from 'src/app/services/department.service';
 import { Department } from 'src/app/models/department.model';
 import { getIdbyName } from 'src/app/utils/idMapper';
+import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-employee-form',
@@ -18,15 +19,6 @@ export class EmployeeFormComponent {
   managers!: Employee[]
 
   constructor(private employeeService: EmployeeService, private departmentService: DepartmentService, private router: Router) { }
-
-  newEmployee: Employee = {
-    name: '',
-    email: '',
-    designation: '',
-    phone: '',
-    departmentName: '',
-    managerName: '',
-  } as Employee; // 👈 no id field here
 
   ngOnInit() {
     this.loadDepartments();
@@ -47,25 +39,49 @@ export class EmployeeFormComponent {
     })
   }
 
-  addEmployee() {
-    const emp = {
-      name: this.newEmployee.name,
-      email: this.newEmployee.email,
-      designation: this.newEmployee.designation,
-      phone: this.newEmployee.phone,
-      managerId: getIdbyName(this.newEmployee.managerName, this.managers),
-      departmentId: getIdbyName(this.newEmployee.departmentName, this.departments)
-    }
-    console.log(emp);
-    this.employeeService.createEmployee(emp).subscribe({
-      next: (data) => {
-        console.log('Employee added:', data);
-        this.router.navigate(['/employees']);
-      },
-      error: (error) => {
-        console.error('Error adding employee:', error);
-      }
-    });
-  }
+  // addEmployee() {
+  //   const emp = {
+  //     name: this.newEmployee.name,
+  //     email: this.newEmployee.email,
+  //     designation: this.newEmployee.designation,
+  //     phone: this.newEmployee.phone,
+  //     managerId: getIdbyName(this.newEmployee.managerName, this.managers),
+  //     departmentId: getIdbyName(this.newEmployee.departmentName, this.departments)
+  //   }
+  //   console.log(emp);
+  //   this.employeeService.createEmployee(emp).subscribe({
+  //     next: (data) => {
+  //       console.log('Employee added:', data);
+  //       this.router.navigate(['/employees']);
+  //     },
+  //     error: (error) => {
+  //       console.error('Error adding employee:', error);
+  //     }
+  //   });
+  // }
 
+  newEmployee = new FormGroup({
+    name: new FormControl('', [
+      Validators.required,
+      Validators.pattern(/^[A-Za-z ]+$/)
+    ]),
+    email: new FormControl('', [
+      Validators.required,
+      Validators.email
+    ]),
+    designation: new FormControl('', Validators.required),
+    phone: new FormControl('', [
+      Validators.required,
+      Validators.pattern(/^[0-9]{10}$/)
+    ]),
+    address: new FormControl('', Validators.required),
+    department: new FormControl('', Validators.required),
+    manager: new FormControl(''),
+  })
+
+  submitForm() {
+    if (this.newEmployee.invalid) return;
+
+    console.log("Submitted:", this.newEmployee.value);
+  }
 }

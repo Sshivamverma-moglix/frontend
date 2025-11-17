@@ -10,6 +10,7 @@ import { EmployeesListComponent } from './components/employees-list/employees-li
 import { EmployeeDetailsComponent } from './components/employee-details/employee-details.component';
 import { EmployeeFormComponent } from './components/employee-form/employee-form.component';
 import { NgChartsModule } from 'ng2-charts';
+import { ReactiveFormsModule } from '@angular/forms';
 
 // ✅ Angular Material Modules
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -51,6 +52,7 @@ import { NewChartComponent } from './components/new-chart/new-chart.component';
     HttpClientModule,
     BrowserAnimationsModule,
     NgChartsModule,
+    ReactiveFormsModule,
 
     // ✅ Material Modules
     MatFormFieldModule,
