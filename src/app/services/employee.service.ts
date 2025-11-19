@@ -101,4 +101,8 @@ export class EmployeeService {
   deleteEmployee(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
+  getTabContent() {
+    return this.http.get(`${this.apiUrl}/overview`);
+  }
 }

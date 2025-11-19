@@ -34,6 +34,7 @@ import { NewChartComponent } from './components/new-chart/new-chart.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { DownloadFormatDownloadComponent } from './components/download-format-download/download-format-download.component';
+import { OverviewDashboardComponent } from './components/overview-dashboard/overview-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { DownloadFormatDownloadComponent } from './components/download-format-do
     NewChartComponent,
     ConfirmDialogComponent,
     DownloadFormatDownloadComponent,
+    OverviewDashboardComponent,
   ],
   imports: [
     BrowserModule,
