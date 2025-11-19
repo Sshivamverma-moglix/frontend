@@ -118,7 +118,6 @@ export class ImportComponent {
 
     const fileName = this.selectedFile.name.toLowerCase();
 
-    // ---- Existing format handling ----
     if (fileName.endsWith('.csv')) {
       console.log(this.selectedFile);
       parseCSV(this.selectedFile, (json) => this.uploadToBackend(json));

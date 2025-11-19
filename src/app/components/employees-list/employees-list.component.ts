@@ -21,7 +21,7 @@ export class EmployeesListComponent implements OnInit {
 
   departmentEnum = Department;
 
-  charType = "bar"
+  charType = "line"
   barChartLabels: string[] = [];
   barChartDatasets: ChartConfiguration<ChartType>['data']['datasets'] = [];
 
