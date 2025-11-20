@@ -1,100 +1,87 @@
+/* Root container fills screen */
 .employee-container {
-  padding: 20px 30px;
-  background-color: #f9fafc;
-  min-height: 100vh;
-}
-
-.header-section {
+  padding: 24px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
+  flex-direction: column;
+  gap: 24px;
+  height: 100vh;              /* important */
+  box-sizing: border-box;
 }
 
-.title {
-  font-size: 24px;
-  font-weight: 600;
-  color: #333;
+/* Let the table area grow and fill leftover height */
+.table-wrapper {
+  flex: 1;                     /* expands to fill remaining space */
+  overflow: auto;
+  border-radius: 8px;
+  background: #fff;
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-header h2 {
   margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.subtitle {
+  color: #666;
+  margin-top: 4px;
+  font-size: 14px;
 }
 
 .actions {
   display: flex;
-  align-items: center;
   gap: 12px;
 }
 
-.table-wrapper {
-  background: #fff;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-top: 15px;
+/* Card Styles */
+mat-card {
+  border-radius: 12px !important;
+  padding: 20px !important;
 }
 
+/* Table Styles */
 .employee-table {
   width: 100%;
-  border-collapse: collapse;
 }
 
-.mat-header-cell {
+.employee-table th {
   font-weight: 600;
-  color: #444;
-  background-color: #f0f0f0;
-  text-transform: uppercase;
+  background: #f5f5f5;
 }
 
-.mat-header-row {
-  height: 56px;
+.employee-table tr:hover {
+  background: #fafafa;
 }
 
-.mat-row:hover {
-  background-color: #f9f9ff;
-  transition: background-color 0.2s ease-in-out;
+/* Action buttons */
+.actions-cell button {
+  margin-right: 8px;
 }
 
-.mat-cell,
-.mat-header-cell {
-  padding: 12px 16px;
-  text-align: left;
-}
-
-button[mat-raised-button] {
-  font-size: 13px;
-  padding: 4px 16px;
-  min-width: 100px;
-  margin-left: 20px;
-}
-
-button[mat-raised-button]:hover {
-  filter: brightness(0.95);
-}
-
+/* No Data */
 .no-data {
   text-align: center;
-  font-style: italic;
+  margin-top: 12px;
+  font-size: 14px;
   color: #999;
-  margin-top: 30px;
 }
 
-.chart-wrapper {
-  margin-top: 30px;
-  padding: 20px;
-  border-radius: 10px;
-  background: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-  width: 100%;
-  box-sizing: border-box;
+/* Charts Layout */
+.chart-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 24px;
 }
 
-.chart-wrapper app-chart {
-  display: block;
-  width: 100%;
+.chart-card {
+  min-height: 300px;
 }
-
-@media (max-width: 768px) {
-  .chart-wrapper {
-    padding: 15px;
-    margin-top: 20px;
-  }
-}
-  

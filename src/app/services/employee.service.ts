@@ -102,7 +102,19 @@ export class EmployeeService {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
-  getTabContent() {
-    return this.http.get(`${this.apiUrl}/overview`);
+  getTabContent(segment: string = 'all') {
+    return this.http.get(`${this.apiUrl}/overview?segment=${segment}`);
+  }
+
+  getFunnelData(segment: string = 'all') {
+    return this.http.get(`${this.apiUrl}/onboarding/funnel?segment=${segment}`);
+  }
+
+  getOnboardingTime(segment: string = 'all') {
+    return this.http.get(`${this.apiUrl}/onboarding/time?segment=${segment}`);
+  }
+
+  getEngagementData() {
+    return this.http.get(`${this.apiUrl}/engagement`);
   }
 }

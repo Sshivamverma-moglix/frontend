@@ -14,13 +14,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 // ✅ Angular Material Modules
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
@@ -35,6 +35,13 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { DownloadFormatDownloadComponent } from './components/download-format-download/download-format-download.component';
 import { OverviewDashboardComponent } from './components/overview-dashboard/overview-dashboard.component';
+import { FunnelChartComponent } from './components/funnel-chart/funnel-chart.component';
+
+import { Chart, registerables } from 'chart.js';
+import { FunnelController, TrapezoidElement } from 'chartjs-chart-funnel';
+
+// 🔽 REGISTER FUNNEL
+Chart.register(...registerables, FunnelController, TrapezoidElement);
 
 @NgModule({
   declarations: [
@@ -51,6 +58,7 @@ import { OverviewDashboardComponent } from './components/overview-dashboard/over
     ConfirmDialogComponent,
     DownloadFormatDownloadComponent,
     OverviewDashboardComponent,
+    FunnelChartComponent,
   ],
   imports: [
     BrowserModule,
@@ -79,4 +87,4 @@ import { OverviewDashboardComponent } from './components/overview-dashboard/over
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

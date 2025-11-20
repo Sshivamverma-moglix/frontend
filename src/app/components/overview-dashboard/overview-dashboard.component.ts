@@ -12,6 +12,9 @@ export class OverviewDashboardComponent implements OnInit {
 
   @ViewChild(BaseChartDirective) chart!: BaseChartDirective;
 
+  segments = ["All", "Online", "Enterprise", "Both"];
+  selectedSegment = "All";
+
   chartTitle = 'Supplier Overview';
   chartType: ChartType = 'bar';
   chartLegend = true;
@@ -48,7 +51,16 @@ export class OverviewDashboardComponent implements OnInit {
   constructor(private employeeService: EmployeeService) { }
 
   ngOnInit(): void {
-    this.employeeService.getTabContent().subscribe({
+    this.loadData(this.selectedSegment);
+  }
+
+  onSegmentChange(segment: string) {
+    this.selectedSegment = segment;
+    this.loadData(segment);
+  }
+
+  loadData(segment: string) {
+    this.employeeService.getTabContent(segment).subscribe({
       next: (data: any) => {
         const values = [
           data.totalSuppliers,
