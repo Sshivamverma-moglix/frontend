@@ -13,20 +13,9 @@ export class DepartmentService {
 
     apiUrl = environment.apiDepartmentUrl;
 
-    departments!: Department[]
+    constructor(private http: HttpClient) { }
 
-    constructor(private http: HttpClient) {
-        const department = this.getDepartments().subscribe({
-            next: (data) => {
-                this.departments = data as any;
-            },
-            error: (error) => {
-                console.log(error);
-            }
-        })
-    }
-
-    getDepartments() {
+    getDepartments(): Observable<any> {
         return this.http.get(this.apiUrl);
     }
 }

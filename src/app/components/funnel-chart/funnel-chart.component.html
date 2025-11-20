@@ -1,8 +1,34 @@
 <div class="chart-container">
+
+  <!-- <div>
+    <mat-form-field>
+      <mat-label>Segment</mat-label>
+      <mat-select [(value)]="">
+        <mat-option >
+
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div> -->
+<div class="chart-container">
+  <div class="segment-selector">
+    <mat-form-field appearance="outline" class="w-48">
+      <mat-label>Select Segment</mat-label>
+      <mat-select (selectionChange)="onSegmentChange($event.value)">
+        <mat-option *ngFor="let seg of segments" [value]="seg">
+          {{ seg }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
   <canvas
     baseChart
     [data]="chartData"
     [type]="chartType"
-    [options]="chartOptions">
+    [options]="chartOptions"
+    [legend]="chartLegend"
+  >
   </canvas>
+</div>
 </div>

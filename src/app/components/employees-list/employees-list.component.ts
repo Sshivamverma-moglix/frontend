@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Employee } from 'src/app/models/employee.model';
@@ -8,13 +8,15 @@ import { PageEvent } from '@angular/material/paginator';
 import { ChartConfiguration, ChartType } from 'chart.js';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { Observable, Subject, takeUntil } from 'rxjs';
+import { FunnelData } from 'src/app/models/funnel-data.model';
 
 @Component({
   selector: 'app-employees-list',
   templateUrl: './employees-list.component.html',
   styleUrls: ['./employees-list.component.css']
 })
-export class EmployeesListComponent implements OnInit {
+export class EmployeesListComponent implements OnInit, OnDestroy {
 
   displayedColumns: string[] = ['id', 'name', 'email', 'designation', 'department', 'manager', 'phone', 'actions'];
   data = new MatTableDataSource<Employee>();
@@ -25,8 +27,6 @@ export class EmployeesListComponent implements OnInit {
   barChartLabels: string[] = [];
   barChartDatasets: ChartConfiguration<ChartType>['data']['datasets'] = [];
 
-
-
   managerName = '';
   departmentName = '';
   name = '';
@@ -34,11 +34,13 @@ export class EmployeesListComponent implements OnInit {
   pageIndex = 0;
   totalItems = 0;
 
+  funnelData$!: Observable<FunnelData>;
+  private destroy$ = new Subject<void>();
 
   constructor(private employeeService: EmployeeService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
 
   ngOnInit() {
-    this.employeeService.getAllData().subscribe((data: any[]) => {
+    this.employeeService.getAllData().pipe(takeUntil(this.destroy$)).subscribe((data: any[]) => {
       const groupedData: { [key: string]: number } = {};
 
       data.forEach(emp => {
@@ -57,10 +59,16 @@ export class EmployeesListComponent implements OnInit {
       ];
     });
     this.getEmployees();
+    this.funnelData$ = this.employeeService.getFunnelData();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getEmployees(manager: string | null = null, department: string | null = null, name: string | null = null, pageIndex: number = 0, pageSize: number = 10) {
-    this.employeeService.getEmployees(manager, department, name, pageIndex, pageSize).subscribe({
+    this.employeeService.getEmployees(manager, department, name, pageIndex, pageSize).pipe(takeUntil(this.destroy$)).subscribe({
       next: (data) => {
         this.data.data = data.data.map((emp: any) => ({ ...emp, managerName: emp.manager, departmentName: emp.department }));
         this.totalItems = data.totalRecords;
@@ -78,30 +86,28 @@ export class EmployeesListComponent implements OnInit {
   }
 
   openDeleteDialog(id: number, name: string, event: MouseEvent) {
-  event.stopPropagation();  // prevent row click
+    event.stopPropagation();  // prevent row click
 
-  const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-    width: '350px',
-    data: { name }  // passing employee name in dialog
-  });
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '350px',
+      data: { name }  // passing employee name in dialog
+    });
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result) {
-      this.deleteEmployee(id);
-    }
-  });
-}
+    dialogRef.afterClosed().pipe(takeUntil(this.destroy$)).subscribe(result => {
+      if (result) {
+        this.deleteEmployee(id);
+      }
+    });
+  }
 
   deleteEmployee(id: number) {
-    this.employeeService.deleteEmployee(id).subscribe({
+    this.employeeService.deleteEmployee(id).pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
-        this.data.data = this.data.data.filter(emp => {
-          emp.id !== id;
-        });
-        this.snackBar.open("Employee deleted successfully", "Close", { duration: 3000 })
+        this.data.data = this.data.data.filter(emp => emp.id !== id);
+        this.snackBar.open("Employee deleted successfully", "Close", { duration: 3000 });
       },
       error: (err) => {
-        this.snackBar.open("Failed to delete Employee", "Close", { duration: 3000 })
+        this.snackBar.open("Failed to delete Employee", "Close", { duration: 3000 });
       }
     });
   }
@@ -113,4 +119,7 @@ export class EmployeesListComponent implements OnInit {
     this.getEmployees(this.managerName, this.departmentName, this.name, this.pageIndex, this.pageSize);
   }
 
+  onFunnelSegmentChange(segment: string) {
+    this.funnelData$ = this.employeeService.getFunnelData(segment);
+  }
 }

@@ -116,7 +116,7 @@
     </mat-card>
 
     <mat-card class="chart-card mat-elevation-z4">
-      <app-funnel-chart></app-funnel-chart>
+      <app-funnel-chart [funnelData]="funnelData$ | async" (segmentChanged)="onFunnelSegmentChange($event)"></app-funnel-chart>
     </mat-card>
 
   </div>

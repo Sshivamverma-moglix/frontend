@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild, Output, EventEmitter } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { Chart, ChartData, ChartOptions, ChartType } from 'chart.js';
-import { EmployeeService } from 'src/app/services/employee.service';
+import { FunnelData } from 'src/app/models/funnel-data.model';
 
 // Register funnel plugin once. Prefer to move this registration to app.module.ts.
 // If you keep it here, it's fine but ensure it runs only once.
@@ -20,9 +20,14 @@ try {
   templateUrl: './funnel-chart.component.html',
   styleUrls: ['./funnel-chart.component.css']
 })
-export class FunnelChartComponent implements OnInit {
+export class FunnelChartComponent implements OnChanges {
 
   @ViewChild(BaseChartDirective) chart!: BaseChartDirective;
+  @Input() funnelData!: FunnelData | null;
+  @Output() segmentChanged = new EventEmitter<string>();
+
+  segments = ["All", "Online", "Enterprise", "Both"];
+  selectedSegment = "All";
 
   chartTitle = 'Supplier Funnel';
   // type must match registered funnel type
@@ -53,56 +58,46 @@ export class FunnelChartComponent implements OnInit {
         text: this.chartTitle
       }
     },
-    // funnel-specific options (you can tune these)
-    // funnel: {
-    //   dynamicHeight: false,
-    //   dynamicSlope: false,
-    //   sort: 'none'
-    // }
   };
 
-  constructor(private employeeService: EmployeeService) { }
+  constructor() { }
 
-  ngOnInit(): void {
-    this.getFunnelData();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['funnelData'] && this.funnelData) {
+      this.updateChart(this.funnelData);
+    }
   }
 
-  getFunnelData() {
-    this.employeeService.getFunnelData().subscribe({
-      next: (data: any) => {
-        // use API-provided labels if available
-        const labels = data.stages?.map((s: any) => s.name) ?? this.labels;
-        const counts = data.stages?.map((s: any) => s.count) ?? [];
+  onSegmentChange(segment: string) {
+    this.selectedSegment = segment;
+    this.segmentChanged.emit(segment);
+  }
 
-        // Update the existing chartData object rather than replacing it
-        this.chartData.labels = labels;
-        this.chartData.datasets = [
-          {
-            data: counts,
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(255, 159, 64, 0.2)',
-              'rgba(255, 205, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(201, 203, 207, 0.2)'
-            ],
-            borderWidth: 1,
-            // make rectangular layers
-            shrinkAnchor: 'none',
-            shrinkFraction: 0
-          } as any // cast so ng2-charts / Chart types accept funnel-specific props
-        ];
+  updateChart(data: FunnelData) {
+    const labels = data.stages?.map((s: any) => s.name) ?? this.labels;
+    const counts = data.stages?.map((s: any) => s.count) ?? [];
 
-        // Force chart to refresh (same pattern as your working component)
-        setTimeout(() => {
-          if (this.chart) this.chart.update();
-        }, 0);
-      },
-      error: (err) => {
-        console.log("Error fetching funnel data →", err);
-      }
-    });
+    this.chartData.labels = labels;
+    this.chartData.datasets = [
+      {
+        data: counts,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 205, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(201, 203, 207, 0.2)'
+        ],
+        borderWidth: 1,
+        shrinkAnchor: 'none',
+        shrinkFraction: 0
+      } as any
+    ];
+
+    if (this.chart) {
+      this.chart.update();
+    }
   }
 }

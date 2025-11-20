@@ -9,6 +9,7 @@ import { getIdbyName } from 'src/app/utils/idMapper';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { allowOnlyDigits, allowOnlyLetters, sanitizeEmail } from 'src/app/utils/parser';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-employee-details',
@@ -33,9 +34,14 @@ export class EmployeeDetailsComponent implements OnInit {
   ngOnInit() {
     this.id = Number(this.route.snapshot.paramMap.get('id'));
 
-    this.loadDepartments();
-    this.loadManagers();
-    this.getEmployee(this.id);
+    forkJoin({
+      departments: this.departmentService.getDepartments(),
+      managers: this.employeeService.getAllManagers()
+    }).subscribe(({ departments, managers }) => {
+      this.departments = departments;
+      this.managers = managers;
+      this.getEmployee(this.id);
+    });
   }
 
    restrictNameInput(event: any) {
@@ -74,14 +80,6 @@ export class EmployeeDetailsComponent implements OnInit {
     departmentId: new FormControl(null, Validators.required),
     managerId: new FormControl(null)
   });
-
-  loadDepartments() {
-    this.departments = this.departmentService.departments;
-  }
-
-  loadManagers() {
-    this.managers = this.employeeService.employees;
-  }
 
   getEmployee(id: number) {
     this.employeeService.getEmployeeById(id).subscribe({
